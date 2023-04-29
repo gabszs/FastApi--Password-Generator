@@ -1,5 +1,5 @@
-
 # script to generate a Random Password
+from schemas.Input_scheme import PasswordBody
 from secrets import choice
 from random import shuffle
 from string import (ascii_letters, digits, punctuation)
@@ -34,7 +34,7 @@ class PasswordGenerator:
         return pin_choice
     
 
-    async def async_password(self, password_lenght: int, has_ponctuation: bool = False, ) -> str: 
+    async def async_password(self, password_lenght: int, has_ponctuation: bool = False) -> str: 
         """
         Generates a random password with the given length and optionally with punctuations.
 
@@ -50,7 +50,7 @@ class PasswordGenerator:
         
         if has_ponctuation:
             minimum_string = list(minimum_string)
-            del minimum_string[1]
+            del minimum_string[0]
             minimum_string = "".join(minimum_string)
 
             minimum_string += choice(punctuation)
@@ -59,35 +59,69 @@ class PasswordGenerator:
         
         if password_lenght == 3:
             password = ''.join(choice(minimum_string) for _ in len(minimum_string))
-            return password
+            return PasswordGenerator.lower_upper_func(password)
         
         else:
             password_choice = ''.join(choice(letters) for _ in range(password_lenght - 3)) + minimum_string
             password_list = list(password_choice)
             shuffle(password_list)
             password = "".join(password_list)
-            return password
+            return PasswordGenerator.lower_upper_func(password)
+        
+
+    async def async_complex_password(self, body: PasswordBody,
+                                     adicional_lenght: int = 0,
+                                     has_ponctuation: bool = False) -> str:
+        shuffle_string, chars , string_list = body.suffle_string_inject, body.char_inject, body.string_inject
+        password = await self.async_password(password_lenght=adicional_lenght, has_ponctuation=has_ponctuation)
+
+        if shuffle_string:
+            string_list = ["".join(shuffle(list(item))) for item in string_list]
+
+        password = list(password)
+        [password.append(item) for item in string_list]
+        [password.append(item) for item in chars]
+        shuffle(password)
+
+        password = ''.join(password)
+
+        return password
 
 
 
+    # async_complex_password(adicional_lenght=10,
+    #                                                        has_ponctuation=True,
+    #                                                        insert_string_List=strings_list
+    #                                                        )
 
-    # def password(password_lenght, ponctuation=False):
-    #     """
-    #     Function to generate a password with letters and digits, and punctuations if necessary
-    #     :param password_lenght: str
-    #     :param ponctuation: Bool
-    #     :return:
-    #     """
-    #     if ponctuation is True:  # if punctuation equals to True, letters going to have punctuation
-    #         letters = ascii_letters + digits + punctuation
-    #     else:  # else letters going to have only letters and digits
-    #         letters = ascii_letters + digits
-    #     password_choice = ''.join(choice(letters) for _ in range(password_lenght))
-    #     # concatenate the letters to create a password
-    #     return password_choice
+    @classmethod
+    def lower_upper_func(cls, password: str) -> str:
+            if password.upper() == password:
+                password = list(password)
+                randchoice = choice(list(range(len(password))))
+                num = password[randchoice]
 
+                while not num.isalpha():
+                    randchoice = choice(list(range(len(password))))  
+                    num = password[randchoice]
 
-    # print(password(10, ponctuation=False))
+                password[randchoice] = password[randchoice].lower()
+                return ''.join(password)     
+
+            elif password.lower() == password:
+                password = list(password)
+                randchoice = choice(list(range(len(password))))
+                num = password[randchoice]
+
+                while not num.isalpha():
+                    randchoice = choice(list(range(len(password))))  
+                    num = password[randchoice]
+
+                password[randchoice] = password[randchoice].upper()
+                return ''.join(password) 
+
+            else:
+                return password
 
 if __name__ == "__main__":
     pg = PasswordGenerator()
