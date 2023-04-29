@@ -3,7 +3,9 @@ from app.main import app
 from fastapi import status
 import json
 
+
 client = TestClient(app=app)
+
 
 def test_pin_unique_route():
     response = client.get('/password/pin/4?quantity=5')

@@ -68,6 +68,7 @@ async def pass_code(password_lenght: int = Path(gt=0, le=100), quantity: int = Q
     corroutines = list()
 
 
+
     for number in range(quantity):
         coro = pg.async_password(password_lenght=password_lenght, has_ponctuation=ponctuation)
         corroutines.append(coro)

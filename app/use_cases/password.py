@@ -70,6 +70,7 @@ class PasswordGenerator:
 
 
 
+
     # def password(password_lenght, ponctuation=False):
     #     """
     #     Function to generate a password with letters and digits, and punctuations if necessary
