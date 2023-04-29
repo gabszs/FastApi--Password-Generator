@@ -2,12 +2,26 @@
 from schemas.Input_scheme import PasswordBody
 from secrets import choice
 from random import shuffle
+from random import shuffle
 from string import (ascii_letters, digits, punctuation)
+from asyncio import (gather, get_event_loop)
+
 from asyncio import (gather, get_event_loop)
 
 
 
 class PasswordGenerator:
+    """
+    Class for generating random passwords and PIN codes.
+
+    Methods:
+    async_pin(pin_lenght: int) -> int:
+        Generates a random PIN code with the given length.
+    
+    async_password(password_lenght: int, has_ponctuation: bool = False) -> str:
+        Generates a random password with the given length and optionally with punctuations.
+    """
+
     """
     Class for generating random passwords and PIN codes.
 
@@ -29,9 +43,18 @@ class PasswordGenerator:
         Returns:
         int: The generated PIN code.
         """        
+        Generates a random PIN code with the given length.
+
+        Args:
+        pin_lenght (int): The length of the generated PIN code.
+
+        Returns:
+        int: The generated PIN code.
+        """        
         pin_range = '1234567890'
         pin_choice = ''.join(choice(pin_range) for _ in range(int(pin_lenght)))
         return pin_choice
+    
     
 
     async def async_password(self, password_lenght: int, has_ponctuation: bool = False) -> str: 
