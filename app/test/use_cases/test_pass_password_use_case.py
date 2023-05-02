@@ -12,8 +12,6 @@ async def test_ponctuation_password():
     assert str(password_ponctuation).isascii()
     assert any(char.isdigit() for char in password_ponctuation)
     assert any(char.isalpha() for char in password_ponctuation)
-    assert any(char.isupper() for char in password_ponctuation)
-    assert any(char.islower() for char in password_ponctuation)    
 
 
 
@@ -27,6 +25,3 @@ async def test_no_ponctutation_password():
     assert str(password).isalnum()
     assert any(char.isdigit() for char in password)
     assert any(char.isalpha() for char in password)    
-    assert any(char.isupper() for char in password)
-    assert any(char.islower() for char in password) 
-

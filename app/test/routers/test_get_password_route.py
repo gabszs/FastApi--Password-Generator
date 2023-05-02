@@ -39,7 +39,7 @@ def test_pass_get_no_ponctuation_route():
     assert len(response_json["data"][1]["2º pin"]) == 10
     assert str(response_json["data"][1]["2º pin"]).isalnum()
 
-    assert len(response_json["data"][2]["3º pin"]) == 1039
+    assert len(response_json["data"][2]["3º pin"]) == 10
     assert str(response_json["data"][2]["3º pin"]).isalnum()   
 
  
