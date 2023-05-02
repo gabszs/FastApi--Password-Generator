@@ -155,3 +155,5 @@ if __name__ == "__main__":
         print(password)
 
     asyncio.run(main())
+
+    # print(password(10, ponctuation=False))
