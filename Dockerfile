@@ -15,3 +15,4 @@ RUN apt-get update -y && apt-get install curl -y \
 
 COPY ./app /app
 WORKDIR /app
+

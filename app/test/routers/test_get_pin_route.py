@@ -27,3 +27,4 @@ def test_pin_unique_route():
     assert len(response_json["data"][3]["4º pin"]) == 4
     assert str(response_json["data"][3]["4º pin"]).isnumeric()    
 
+

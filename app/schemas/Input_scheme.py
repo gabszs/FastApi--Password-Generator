@@ -3,6 +3,7 @@ from pydantic import (BaseModel, validator)
 from typing import List
 from app.schemas.custom_base_model import CustomBaseModel
 
+
 class PasswordBody(CustomBaseModel):
     suffle_string_inject: bool = False
     char_inject: List[str]

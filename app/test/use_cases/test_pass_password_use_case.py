@@ -14,7 +14,6 @@ async def test_ponctuation_password():
     assert any(char.isalpha() for char in password_ponctuation)
 
 
-
 @pytest.mark.asyncio
 async def test_no_ponctutation_password():
     pg = PasswordGenerator()    

@@ -17,6 +17,7 @@ async def test_complex_password_no_suffle():
         )
 
 
+
     assert len(complex_password) == 10 + sum([sum(len(string) for string in strings_list), sum(len(char) for char in char_list)])
     assert str(complex_password).isascii()
     assert any(char.isdigit() for char in complex_password)

@@ -14,5 +14,6 @@ def test_input_scheme():
                                     'string_inject': ["gabriel23%#@", "dudus1@"]}
     
 
+
 if __name__ == "__main__":
     test = test_input_scheme()

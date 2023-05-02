@@ -9,6 +9,7 @@ def test_input_scheme():
         string_inject=["gabriel23%#@", "dudus1@"]
     )
 
+
     assert pb.dict() == {'suffle_string_inject': False,
                                     'char_inject': ['s','b','_','2'],
                                     'string_inject': ["gabriel23%#@", "dudus1@"]}

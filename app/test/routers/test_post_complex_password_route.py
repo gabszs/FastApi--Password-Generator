@@ -32,7 +32,6 @@ def test_complex_password_route():
    assert all(text in response_json["data"][0]["1º pin"] for text in strings_list)
    assert all(text in response_json["data"][0]["1º pin"] for text in char_list)
 
-
    assert len(response_json["data"][1]["2º pin"]) == 10 + sum([sum(len(string) for string in strings_list), sum(len(char) for char in char_list)])
    assert str(response_json["data"][1]["2º pin"]).isascii()
    assert check_any_alnum(response_json["data"][1]["2º pin"])
