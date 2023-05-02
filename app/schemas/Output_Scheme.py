@@ -11,4 +11,3 @@ class PasswordOutput(CustomBaseModel):
 
 
     
-    

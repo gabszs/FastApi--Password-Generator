@@ -131,4 +131,3 @@ async def complex_password(
         data=[{f"{count + 1}º pin": gather_result[count]} for count in range(quantity)]
     )
 
-

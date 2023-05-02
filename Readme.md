@@ -177,7 +177,3 @@ Authors:
 - **Gabriel Carvalho** - API implementation - [GabrielCarvalho](https://github.com/gabszs)
 
 - **linkedin** - [Gabriel Carvalho](https://www.linkedin.com/in/gabzsz/)
-
-```
-
-```

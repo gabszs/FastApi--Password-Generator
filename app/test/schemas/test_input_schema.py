@@ -2,6 +2,7 @@ from app.schemas.Input_scheme import PasswordBody
 import pytest
 
 
+
 def test_input_scheme():
     pb = PasswordBody(
         suffle_string_inject=False,

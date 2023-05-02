@@ -24,7 +24,6 @@ def test_pass_get_route():
     assert len(response_json["data"][2]["3º pin"]) == 10
     assert str(response_json["data"][2]["3º pin"]).isascii()    
 
-
 def test_pass_get_no_ponctuation_route():
     response = client.get('password/pass/10?quantity=3')
     response_json = response.json()

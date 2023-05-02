@@ -7,7 +7,6 @@ async def test_ponctuation_password():
     pg = PasswordGenerator()
     password_ponctuation = await pg.async_password(password_lenght=10, has_ponctuation=True)
 
-
     assert len(password_ponctuation) == 10
     assert str(password_ponctuation).isascii()
     assert any(char.isdigit() for char in password_ponctuation)

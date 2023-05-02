@@ -9,4 +9,3 @@ def test_output_scheme():
     assert output_scheme.dict() == {'message': "Success", 'data': [{'name1': 'Gabriel', 'name2': 'Pedro'}]}
 
 
-
