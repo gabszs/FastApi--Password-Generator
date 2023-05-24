@@ -6,7 +6,7 @@ import json
 client = TestClient(app=app)
 
 def test_pin_unique_route():
-    response = client.get('/password/pin/4?quantity=5')
+    response = client.get('/pin/4?quantity=5')
     response_json = response.json()
 
     assert response.status_code == status.HTTP_200_OK

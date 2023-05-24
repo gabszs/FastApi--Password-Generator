@@ -2,10 +2,29 @@ from fastapi import (APIRouter, Path, Query)
 from app.use_cases.password import PasswordGenerator
 from app.schemas.Output_Scheme import PasswordOutput
 from asyncio import gather
-from app.test.schema.test_input_schema import PasswordBody
+from app.schemas.Input_scheme import PasswordBody
 
 
-router = APIRouter(prefix='/password', tags=['Password-Generator'])
+router = APIRouter(tags=['Password-Generator'])
+
+@router.get('/', response_model=PasswordOutput)
+async def get_code():
+    """
+    Endpoint to generate random PIN codes With 12 chars and ponctuation.
+
+    Returns:
+    --------
+    PasswordOutput
+        An object containing a message and a list of dictionaries, each containing the PIN code.
+    """
+    pg = PasswordGenerator()
+
+    password = await pg.async_password(password_lenght=12, has_ponctuation=True)
+
+    return PasswordOutput(
+        message="Success",
+        data=[{f"1º pin": password}]
+    )
 
 
 @router.get('/pin/{password_lenght}', response_model=PasswordOutput)

@@ -1,5 +1,5 @@
 # script to generate a Random Password
-from schemas.Input_scheme import PasswordBody
+from app.schemas.Input_scheme import PasswordBody
 from secrets import choice
 from random import shuffle
 from string import (ascii_letters, digits, punctuation)

@@ -1,7 +1,8 @@
 from fastapi.testclient import TestClient
 from app.main import app
 from fastapi import status
-from app.test.schema.test_input_schema import PasswordBody
+# from test.schema.test_input_schema import PasswordBody
+from app.schemas.Input_scheme import PasswordBody
 
 
 client = TestClient(app=app)
@@ -19,7 +20,7 @@ def test_complex_password_route():
       "string_inject": strings_list
     }
 
-   response = client.post('/password/complex_password/10?quantity=3&ponctuation=False', json=body)
+   response = client.post('/complex_password/10?quantity=3&ponctuation=False', json=body)
    response_json = response.json()
 
    assert response.status_code == status.HTTP_200_OK

@@ -7,7 +7,7 @@ client = TestClient(app=app)
 
 
 def test_pass_get_route():
-    response = client.get('password/pass/10?quantity=3&ponctuation=True')
+    response = client.get('pass/10?quantity=3&ponctuation=True')
     response_json = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -25,7 +25,7 @@ def test_pass_get_route():
     assert str(response_json["data"][2]["3º pin"]).isascii()    
 
 def test_pass_get_no_ponctuation_route():
-    response = client.get('password/pass/10?quantity=3')
+    response = client.get('pass/10?quantity=3')
     response_json = response.json()
 
     assert response.status_code == status.HTTP_200_OK
