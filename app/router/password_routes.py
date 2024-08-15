@@ -1,13 +1,18 @@
-from fastapi import (APIRouter, Path, Query)
-from app.use_cases.password import PasswordGenerator
-from app.schemas.Output_Scheme import PasswordOutput
 from asyncio import gather
+
+from fastapi import APIRouter
+from fastapi import Path
+from fastapi import Query
+
 from app.schemas.Input_scheme import PasswordBody
+from app.schemas.Output_Scheme import PasswordOutput
+from app.use_cases.password import PasswordGenerator
 
 
-router = APIRouter(tags=['Password-Generator'])
+router = APIRouter(tags=["Password-Generator"])
 
-@router.get('/', response_model=PasswordOutput)
+
+@router.get("/", response_model=PasswordOutput)
 async def get_code():
     """
     Endpoint to generate random PIN codes With 12 chars and ponctuation.
@@ -21,92 +26,89 @@ async def get_code():
 
     password = await pg.async_password(password_lenght=12, has_ponctuation=True)
 
-    return PasswordOutput(
-        message="Success",
-        data=[{f"1º pin": password}]
-    )
+    return PasswordOutput(message="Success", data=[{"1º pin": password}])
 
 
-@router.get('/pin/{password_lenght}', response_model=PasswordOutput)
+@router.get("/pin/{password_lenght}", response_model=PasswordOutput)
 async def pin_code(password_lenght: int = Path(gt=0, le=100), quantity: int = Query(gt=0, le=100)):
     """
     Endpoint to generate random pin codes.
-    
+
     Parameters:
     -----------
     password_lenght : int
         The length of the pin code to be generated.
-    
+
     quantity : int
         The number of pin codes to be generated.
-    
+
     Returns:
     --------
     PasswordOutput
         An object containing a message and a list of dictionaries, each containing a number and its respective pin code.
-    """    
+    """
 
     pg = PasswordGenerator()
     corroutines = list()
-
 
     for number in range(quantity):
         coro = pg.async_pin(pin_lenght=password_lenght)
         corroutines.append(coro)
 
     gather_result = await gather(*corroutines)
-    
 
     return PasswordOutput(
         message="Success",
-        data=[{f"{count + 1}º pin": gather_result[count]} for count in range(quantity)]
+        data=[{f"{count + 1}º pin": gather_result[count]} for count in range(quantity)],
     )
 
 
-@router.get('/pass/{password_lenght}', response_model=PasswordOutput)
-async def pass_code(password_lenght: int = Path(gt=0, le=100), quantity: int = Query(gt=0, le=100), ponctuation: bool = False):
+@router.get("/pass/{password_lenght}", response_model=PasswordOutput)
+async def pass_code(
+    password_lenght: int = Path(gt=0, le=100),
+    quantity: int = Query(gt=0, le=100),
+    ponctuation: bool = False,
+):
     """
     Endpoint to generate random passwords.
-    
+
     Parameters:
     -----------
     password_lenght : int
         The length of the password to be generated.
-    
+
     quantity : int
         The number of passwords to be generated.
-    
+
     ponctuation : bool, optional
         A boolean value indicating whether the password should contain punctuation characters.
-    
+
     Returns:
     --------
     PasswordOutput
         An object containing a message and a list of dictionaries, each containing a number and its respective password.
-    """     
+    """
     pg = PasswordGenerator()
     corroutines = list()
-
 
     for number in range(quantity):
         coro = pg.async_password(password_lenght=password_lenght, has_ponctuation=ponctuation)
         corroutines.append(coro)
 
     gather_result = await gather(*corroutines)
-    
 
     return PasswordOutput(
         message="Success",
-        data=[{f"{count + 1}º pin": gather_result[count]} for count in range(quantity)]
+        data=[{f"{count + 1}º pin": gather_result[count]} for count in range(quantity)],
     )
 
 
-@router.post('/complex_password/{adicional_lenght}', response_model=PasswordOutput)
+@router.post("/complex_password/{adicional_lenght}", response_model=PasswordOutput)
 async def complex_password(
     body: PasswordBody,
     adicional_lenght: int = Path(gt=0, le=100),
-    quantity: int = Query(gt=0, le=100), 
-    ponctuation: bool = False
+    quantity: int = Query(gt=0, le=100),
+    ponctuation: bool = False,
 ):
     """
     POST /complex_password/{additional_length}
@@ -139,14 +141,13 @@ async def complex_password(
             string_inject=body.string_inject,
             suffle_string_inject=body.suffle_string_inject,
             adicional_lenght=adicional_lenght,
-            has_ponctuation=ponctuation
+            has_ponctuation=ponctuation,
         )
         corroutines.append(coro)
 
     gather_result = await gather(*corroutines)
-    
+
     return PasswordOutput(
         message="Success",
-        data=[{f"{count + 1}º pin": gather_result[count]} for count in range(quantity)]
+        data=[{f"{count + 1}º pin": gather_result[count]} for count in range(quantity)],
     )
-

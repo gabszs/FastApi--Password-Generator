@@ -1,6 +1,7 @@
 from fastapi import FastAPI
+from uvicorn import run
+
 from app.router.password_routes import router
-from uvicorn import run 
 
 
 app = FastAPI(
@@ -10,8 +11,8 @@ app = FastAPI(
     contact={
         "name": "GabrielCarvalho",
         "email": "gabrielcarvalho.workk@gmail.com",
-        "url": "https://www.linkedin.com/in/gabzsz"
-    }
+        "url": "https://www.linkedin.com/in/gabzsz",
+    },
 )
 app.include_router(router=router)
 

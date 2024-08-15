@@ -1,13 +1,8 @@
-from fastapi.testclient import TestClient
-from app.main import app
 from fastapi import status
 
-client = TestClient(app=app)
 
-
-
-def test_pass_get_route():
-    response = client.get('pass/10?quantity=3&ponctuation=True')
+def test_pass_get_route(client):
+    response = client.get("pass/10?quantity=3&ponctuation=True")
     response_json = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -22,10 +17,11 @@ def test_pass_get_route():
     assert str(response_json["data"][1]["2º pin"]).isascii()
 
     assert len(response_json["data"][2]["3º pin"]) == 10
-    assert str(response_json["data"][2]["3º pin"]).isascii()    
+    assert str(response_json["data"][2]["3º pin"]).isascii()
 
-def test_pass_get_no_ponctuation_route():
-    response = client.get('pass/10?quantity=3')
+
+def test_pass_get_no_ponctuation_route(client):
+    response = client.get("pass/10?quantity=3")
     response_json = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -40,6 +36,4 @@ def test_pass_get_no_ponctuation_route():
     assert str(response_json["data"][1]["2º pin"]).isalnum()
 
     assert len(response_json["data"][2]["3º pin"]) == 10
-    assert str(response_json["data"][2]["3º pin"]).isalnum()   
-
- 
+    assert str(response_json["data"][2]["3º pin"]).isalnum()
