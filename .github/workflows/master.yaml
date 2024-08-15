@@ -13,11 +13,8 @@ on:
 env:
   CLOUD_REGION: sa-brazil-1
   SWR_ORGANIZATION: devopsbrdev
-  IMAGE_NAME: cv-manager
+  IMAGE_NAME: password_generator
   IMAGE_TAG: latest
-  NAMESPACE: cci-workspace-resume-infra
-  DEPLOYMENT: password_generator
-  PROJECT_ID: 4e3eb0b6e82f41a1bc07bf0127edbf77
 
 
 jobs:
