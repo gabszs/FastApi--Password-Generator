@@ -63,17 +63,12 @@ jobs:
 
       - name: Create SWR Tag
         run: |
-          docker tag ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} $IMAGE_BUILD_NAME
-        env:
-          IMAGE_BUILD_NAME: ${{ env.IMAGE_BUILD_NAME }}
-
-      - name: List Docker Images
-        run: docker images
-
+          docker tag ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} ${{ steps.build-image.outputs.IMAGE_BUILD_NAME }}
+      
       - name: Push Docker Image to SWR
         run: |
-          docker push $IMAGE_BUILD_NAME
-          echo "::set-output name=image::${{ env.IMAGE_BUILD_NAME }}"
+          docker push ${{ steps.build-image.outputs.IMAGE_BUILD_NAME }}
+          echo "::set-output name=image::${{ steps.build-image.outputs.IMAGE_BUILD_NAME }}"
 
   push-to-dockerhub:
     runs-on: ubuntu-latest
@@ -86,7 +81,7 @@ jobs:
       - name: Tag and Push Docker Image to Docker Hub
         env:
           IMAGE_HUB_NAME: "${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}"
-          IMAGE_BUILD_NAME: ${{ steps.push-to-swr.outputs.image }} # Use the output from the previous step
+          IMAGE_BUILD_NAME: ${{ steps.push-to-swr.outputs.image }} # Use a saída do passo anterior
         run: |
           docker tag $IMAGE_BUILD_NAME $IMAGE_HUB_NAME
           docker push $IMAGE_HUB_NAME
