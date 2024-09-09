@@ -16,6 +16,6 @@ RUN apt-get update -y && apt-get install curl -y \
 COPY ./app /app
 WORKDIR /app
 
-EXPOSE 6543
+EXPOSE 80
 
 CMD ["python", "main.py"]

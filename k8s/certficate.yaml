@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: portfile
+  namespace: password-generator
+spec:
+  secretName: portfile-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  commonName: "*.portfile.dev"
+  dnsNames:
+  - "*.portfile.dev"
+  - portfile.dev
