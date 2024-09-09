@@ -17,6 +17,7 @@ env:
   IMAGE_TAG: lts
   DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
   DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
+  
 
 jobs:
   build:
@@ -57,18 +58,23 @@ jobs:
 
       - name: Build Docker Image
         id: build-image
-        run: docker build -t ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} .
+        env:
+          IMAGE_BUILD_NAME: ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+
+        run: docker build -t ${{ env.IMAGE_BUILD_NAME }} .
 
       - name: Create SWR Tag
         env:
-          IMAGE_BUILD_NAME: swr.${{ env.CLOUD_REGION }}.myhuaweicloud.com/${{ env.SWR_ORGANIZATION }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+          SWR_IMAGE_TAG: swr.${{ env.CLOUD_REGION }}.myhuaweicloud.com/${{ env.SWR_ORGANIZATION }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
         run: |
-          docker tag ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} ${{ env.IMAGE_BUILD_NAME }}
+          docker tag ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} ${{ env.SWR_IMAGE_TAG }}
 
       - name: Push Docker Image to SWR
+        env:
+          SWR_IMAGE_TAG: swr.${{ env.CLOUD_REGION }}.myhuaweicloud.com/${{ env.SWR_ORGANIZATION }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
         run: |
-          docker push ${{ steps.build-image.outputs.IMAGE_BUILD_NAME }}
-          echo "::set-output name=image::${{ steps.build-image.outputs.IMAGE_BUILD_NAME }}"
+          docker push ${{ env.SWR_IMAGE_TAG }}
+          echo "::set-output name=image::${{ env.SWR_IMAGE_TAG }}"
 
   push-to-dockerhub:
     runs-on: ubuntu-latest
@@ -81,7 +87,7 @@ jobs:
       - name: Tag and Push Docker Image to Docker Hub
         env:
           IMAGE_HUB_NAME: "${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}"
-          IMAGE_BUILD_NAME: ${{ steps.push-to-swr.outputs.image }} # Use a saída do passo anterior
+          IMAGE_BUILD_NAME: ${{ steps.push-to-swr.outputs.IMAGE_BUILD_NAME }} # Use a saída do passo anterior
         run: |
           docker tag $IMAGE_BUILD_NAME $IMAGE_HUB_NAME
           docker push $IMAGE_HUB_NAME
