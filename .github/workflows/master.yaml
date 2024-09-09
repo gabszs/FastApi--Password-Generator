@@ -57,14 +57,14 @@ jobs:
 
       - name: Build Docker Image
         id: build-image
-        env:
-          IMAGE_BUILD_NAME: swr.${{ env.CLOUD_REGION }}.myhuaweicloud.com/${{ env.SWR_ORGANIZATION }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
         run: docker build -t ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} .
 
       - name: Create SWR Tag
+        env:
+          IMAGE_BUILD_NAME: swr.${{ env.CLOUD_REGION }}.myhuaweicloud.com/${{ env.SWR_ORGANIZATION }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
         run: |
-          docker tag ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} ${{ steps.build-image.outputs.IMAGE_BUILD_NAME }}
-      
+          docker tag ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} ${{ env.IMAGE_BUILD_NAME }}
+
       - name: Push Docker Image to SWR
         run: |
           docker push ${{ steps.build-image.outputs.IMAGE_BUILD_NAME }}
