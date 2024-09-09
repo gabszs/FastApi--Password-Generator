@@ -17,4 +17,4 @@ app = FastAPI(
 app.include_router(router=router)
 
 if __name__ == "__main__":
-    run("main:app", host="0.0.0.0", port=6543, reload=True)
+    run("main:app", host="0.0.0.0", port=80, reload=True)
