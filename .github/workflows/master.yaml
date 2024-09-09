@@ -17,7 +17,7 @@ env:
   IMAGE_TAG: lts
   DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
   DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
-  
+
 
 jobs:
   build:
@@ -87,7 +87,7 @@ jobs:
       - name: Tag and Push Docker Image to Docker Hub
         env:
           IMAGE_HUB_NAME: "${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}"
-          IMAGE_BUILD_NAME: ${{ steps.push-to-swr.outputs.IMAGE_BUILD_NAME }} # Use a saída do passo anterior
+          IMAGE_BUILD_NAME: ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
         run: |
           docker tag  ${{ env.IMAGE_BUILD_NAME }} ${{ env.IMAGE_HUB_NAME }}
           docker push ${{ env.IMAGE_HUB_NAME }}
