@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: passwordservice
-        image: gabzsz/auth_service:lts
+        image: gabzsz/password-generator:lts
         ports:
         - containerPort: 80
 
