@@ -64,13 +64,13 @@ jobs:
       - name: Create SWR Tag
         run: |
           docker tag ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} $IMAGE_BUILD_NAME
+        env:
+          IMAGE_BUILD_NAME: ${{ env.IMAGE_BUILD_NAME }}
 
       - name: List Docker Images
         run: docker images
 
       - name: Push Docker Image to SWR
-        env:
-          IMAGE_BUILD_NAME: swr.${{ env.CLOUD_REGION }}.myhuaweicloud.com/${{ env.SWR_ORGANIZATION }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
         run: |
           docker push $IMAGE_BUILD_NAME
           echo "::set-output name=image::${{ env.IMAGE_BUILD_NAME }}"
@@ -86,7 +86,7 @@ jobs:
       - name: Tag and Push Docker Image to Docker Hub
         env:
           IMAGE_HUB_NAME: "${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}"
-          IMAGE_BUILD_NAME: ${{ steps.build-image.outputs.image }} # Use the output from the previous step
+          IMAGE_BUILD_NAME: ${{ steps.push-to-swr.outputs.image }} # Use the output from the previous step
         run: |
           docker tag $IMAGE_BUILD_NAME $IMAGE_HUB_NAME
           docker push $IMAGE_HUB_NAME
