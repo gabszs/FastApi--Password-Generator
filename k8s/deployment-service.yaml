@@ -12,7 +12,7 @@ spec:
   template:
     metadata:
       labels:
-        editor: passwordservice
+        app: passwordservice
     spec:
       containers:
       - name: passwordservice
