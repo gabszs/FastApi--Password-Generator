@@ -93,6 +93,9 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3 
+        with:
+          token: ${{ secrets.MODIFY_TOKEN }}
+          fetch-depth: 0
 
       - name: Set New Image Tag
         run: |
@@ -111,11 +114,11 @@ jobs:
 
       - name: Git Config
         run: |
-          git config --global user.email "ci-bot@example.com"
+          git config --global user.email "ci-bot@ci.com"
           git config --global user.name "CI Bot"
 
       - name: Commit and Push Changes
         run: |
           git add k8s/deployment.yaml
-          git commit -m "Atualiza a tag da imagem para ${NEW_IMAGE_TAG}"
+          git commit -m "Updating the the image tag: ${NEW_IMAGE_TAG}"
           git push origin gitops
