@@ -90,12 +90,15 @@ jobs:
   Update-Image-Tag-in-Deployment:
     runs-on: ubuntu-latest
     needs: build-and-test          
-      
+
     steps:
-      - name: Update Image Tag in values.yaml
+      - name: Set New Image Tag
         run: |
           NEW_IMAGE_TAG="v$(date +%Y%m%d%H%M%S)"
-          sed -i "s/image: .*/image: ${{ env.IMAGE_NAME }}:${NEW_IMAGE_TAG}/" path/to/your/chart/values.yaml
+
+      - name: Update Image Tag in Deployment
+        run: |
+          sed -i "s|image: gabzsz/password-generator:.*|image: gabzsz/password-generator:${NEW_IMAGE_TAG}|" k8s/deployment.yaml
 
       - name: Git Config
         run: |
@@ -104,6 +107,6 @@ jobs:
 
       - name: Commit and Push Changes
         run: |
-          git add path/to/your/chart/values.yaml
+          git add k8s/deployment.yaml
           git commit -m "Atualiza a tag da imagem para ${NEW_IMAGE_TAG}"
           git push origin your-branch-name
