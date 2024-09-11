@@ -95,6 +95,9 @@ jobs:
         run: |
           NEW_IMAGE_TAG="v$(date +%Y%m%d%H%M%S)"
 
+      - name: Debbug Files
+        run: ls -a
+
       - name: Update Image Tag in Deployment
         run: |
           sed -i "s|image: gabzsz/password-generator:.*|image: gabzsz/password-generator:${NEW_IMAGE_TAG}|" k8s/deployment.yaml
