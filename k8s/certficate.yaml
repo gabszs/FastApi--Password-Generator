@@ -8,7 +8,7 @@ spec:
   issuerRef:
     name: letsencrypt-production
     kind: ClusterIssuer
-  commonName: "*.portfile.dev"
+  commonName: "password-svc.portfile.dev"
   dnsNames:
-  - "*.portfile.dev"
-  - portfile.dev
+  - "password-svc.portfile.dev"
+
