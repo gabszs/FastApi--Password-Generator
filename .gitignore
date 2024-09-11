@@ -35,4 +35,5 @@ override.tf.json
 .metals
 settings.json
 
-.github
+.github/
+.github/workflows/master.yaml
