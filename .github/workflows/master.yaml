@@ -66,7 +66,7 @@ jobs:
         env:
           SWR_IMAGE_TAG: swr.${{ env.CLOUD_REGION }}.myhuaweicloud.com/${{ env.SWR_ORGANIZATION }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
         run: |
-          docker tag ${{ env.IMAGE_BUILD_NAME }} ${{ env.SWR_IMAGE_TAG }}
+          docker tag ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} ${{ env.SWR_IMAGE_TAG }}
 
       - name: Push Docker Image to SWR
         env:
