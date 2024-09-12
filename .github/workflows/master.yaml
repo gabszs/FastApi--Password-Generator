@@ -40,7 +40,7 @@ jobs:
       - name: Run tests
         run: poetry run task test
         
-  push-to-swr-and-dockerhub:
+  push-to-dockerhub:
     runs-on: ubuntu-latest
     needs: build-and-test
 
@@ -55,36 +55,13 @@ jobs:
           echo "NEW_IMAGE_TAG=${NEW_IMAGE_TAG}" >> $GITHUB_ENV
           echo "::set-output name=new_tag::${NEW_IMAGE_TAG}"
 
-      - name: Huawei Cloud Software Repository for Container (SWR) Login
-        uses: huaweicloud/swr-login@v2.1.0
-        with:
-          access-key-id: ${{ secrets.ACCESS_KEY }}
-          access-key-secret: ${{ secrets.SECRET_ACCESS_KEY }}
-          region: ${{ env.CLOUD_REGION }}
-
       - name: Build Docker Image
         id: build-image
         env:
-          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          IMAGE_NAME: ${{ secrets.DOCKER_HUB_USERNAME }}/my-app
+          IMAGE_TAG: ${{ steps.set-new-tag.outputs.new_tag }}
         run: |
-          docker build -t $IMAGE_NAME .
-
-      - name: Tag Docker Image
-        env:
-          SWR_TAG_LTS: swr.${{ env.CLOUD_REGION }}.myhuaweicloud.com/${{ env.SWR_ORGANIZATION }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-          SWR_TAG_NEW: swr.${{ env.CLOUD_REGION }}.myhuaweicloud.com/${{ env.SWR_ORGANIZATION }}/${{ env.IMAGE_NAME }}:${{ steps.set-new-tag.outputs.new_tag }}
-        run: |
-          docker tag ${{ env.IMAGE_NAME }} $SWR_TAG_LTS
-          docker tag ${{ env.IMAGE_NAME }} $SWR_TAG_NEW
-
-      - name: Push Docker Image to SWR
-        env:
-          SWR_TAG_LTS: swr.${{ env.CLOUD_REGION }}.myhuaweicloud.com/${{ env.SWR_ORGANIZATION }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-          SWR_TAG_NEW: swr.${{ env.CLOUD_REGION }}.myhuaweicloud.com/${{ env.SWR_ORGANIZATION }}/${{ env.IMAGE_NAME }}:${{ steps.set-new-tag.outputs.new_tag }}
-        run: |
-          # Push both tags (lts and version)
-          docker push $SWR_TAG_LTS
-          docker push $SWR_TAG_NEW
+          docker build -t $IMAGE_NAME:${{ env.IMAGE_TAG }} -t $IMAGE_NAME:latest .
 
       - name: Docker Hub Login
         run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
@@ -92,22 +69,17 @@ jobs:
       - name: docker images
         run: docker images
 
-      - name: docker echo command
-        run: echo "command - ${{ env.IMAGE_NAME }}:latest $IMAGE_NAME:${IMAGE_TAG_LTS} -- command - ${{ env.IMAGE_NAME }}:latest $IMAGE_NAME:${IMAGE_TAG_NEW}"
-
       - name: Tag and Push Docker Image to Docker Hub
         env:
-          IMAGE_HUB_NAME: "${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}"
-          IMAGE_BUILD_NAME: ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-          # IMAGE_TAG_NEW: ${{ steps.set-new-tag.outputs.new_tag }}
+          IMAGE_HUB_NAME: "${{ secrets.DOCKER_HUB_USERNAME }}/my-app"
+          IMAGE_TAG_NEW: ${{ steps.set-new-tag.outputs.new_tag }}
         run: |
-          docker tag  ${{ env.IMAGE_BUILD_NAME }} ${{ env.IMAGE_HUB_NAME }}
-          docker tag $IMAGE_NAME "${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ steps.set-new_tag.outputs.new_tag }}"
-          docker push ${{ env.IMAGE_HUB_NAME }}
+          docker push $IMAGE_HUB_NAME:${{ env.IMAGE_TAG_NEW }}
+          docker push $IMAGE_HUB_NAME:latest
 
   Update-Image-Tag-in-Deployment:
     runs-on: ubuntu-latest
-    needs: [build-and-test, push-to-swr-and-dockerhub]
+    needs: [build-and-test, push-to-dockerhub]
 
     steps:
       - name: Checkout Repository
