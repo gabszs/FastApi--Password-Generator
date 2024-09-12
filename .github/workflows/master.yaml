@@ -103,8 +103,8 @@ jobs:
           IMAGE_TAG_NEW: ${{ steps.set-new-tag.outputs.new_tag }}
         run: |
           # Tagging the image for Docker Hub
-          docker tag $IMAGE_NAME:${IMAGE_TAG_LTS} $IMAGE_NAME:${IMAGE_TAG_LTS}
-          docker tag $IMAGE_NAME:${IMAGE_TAG_NEW} $IMAGE_NAME:${IMAGE_TAG_NEW}
+          docker tag ${IMAGE_NAME}:${IMAGE_TAG_LTS} ${IMAGE_NAME}:${IMAGE_TAG_LTS}
+          docker tag ${IMAGE_NAME}:${IMAGE_TAG_NEW} ${IMAGE_NAME}:${IMAGE_TAG_NEW}
 
       - name: Push Docker Image to Docker Hub
         env:
