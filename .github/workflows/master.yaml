@@ -14,7 +14,7 @@ env:
   CLOUD_REGION: sa-brazil-1
   SWR_ORGANIZATION: devopsbrdev
   IMAGE_NAME: password-generator
-  IMAGE_TAG:  
+  IMAGE_TAG: latest
   DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
   DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
 
