@@ -108,6 +108,9 @@ jobs:
           git config --global user.email "ci-bot@ci.com"
           git config --global user.name "CI Bot"
 
+      - name: Cat Deployment
+        run: cat k8s/deployment.yaml
+
       - name: Commit and Push Changes
         run: |
           git add k8s/deployment.yaml
