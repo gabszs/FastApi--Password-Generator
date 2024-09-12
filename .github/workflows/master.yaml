@@ -94,6 +94,9 @@ jobs:
           token: ${{ secrets.MODIFY_TOKEN }}
           fetch-depth: 0
 
+      - name: Install Poetry
+        run: pipx install poetry
+
       - name: Get Version from pyproject.toml
         id: get-version
         run: |
