@@ -14,7 +14,6 @@ env:
   CLOUD_REGION: sa-brazil-1
   SWR_ORGANIZATION: devopsbrdev
   IMAGE_NAME: password-generator
-  IMAGE_TAG: latest
   DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
   DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
 
@@ -48,18 +47,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set New Image Tag
-        id: set-new-tag
+      - name: Get Version from pyproject.toml
+        id: get-version
         run: |
-          NEW_IMAGE_TAG="v$(date +%Y%m%d%H%M%S)"
-          echo "NEW_IMAGE_TAG=${NEW_IMAGE_TAG}" >> $GITHUB_ENV
-          echo "::set-output name=new_tag::${NEW_IMAGE_TAG}"
+          VERSION=$(grep 'version = ' pyproject.toml | sed -E 's/version = "([^"]+)"/\1/')
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+          echo "::set-output name=version::${VERSION}"
 
       - name: Build Docker Image
         id: build-image
         env:
           IMAGE_NAME: ${{ secrets.DOCKER_HUB_USERNAME }}/my-app
-          IMAGE_TAG: ${{ steps.set-new-tag.outputs.new_tag }}
+          IMAGE_TAG: ${{ steps.get-version.outputs.version }}
         run: |
           docker build -t $IMAGE_NAME:${{ env.IMAGE_TAG }} -t $IMAGE_NAME:latest .
 
@@ -72,9 +71,8 @@ jobs:
       - name: Tag and Push Docker Image to Docker Hub
         env:
           IMAGE_HUB_NAME: "${{ secrets.DOCKER_HUB_USERNAME }}/my-app"
-          IMAGE_TAG_NEW: ${{ steps.set-new-tag.outputs.new_tag }}
         run: |
-          docker push $IMAGE_HUB_NAME:${{ env.IMAGE_TAG_NEW }}
+          docker push $IMAGE_HUB_NAME:${{ steps.get-version.outputs.version }}
           docker push $IMAGE_HUB_NAME:latest
 
   Update-Image-Tag-in-Deployment:
@@ -90,7 +88,7 @@ jobs:
 
       - name: Set New Image Tag
         run: |
-          NEW_IMAGE_TAG="${{ needs.push-to-swr-and-dockerhub.outputs.new_tag }}"
+          NEW_IMAGE_TAG="${{ needs.push-to-dockerhub.outputs.version }}"
           echo "Using NEW_IMAGE_TAG=${NEW_IMAGE_TAG}"
 
       - name: Checkout GitOps Branch
