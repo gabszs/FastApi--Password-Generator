@@ -14,7 +14,7 @@ env:
   CLOUD_REGION: sa-brazil-1
   SWR_ORGANIZATION: devopsbrdev
   IMAGE_NAME: password-generator
-  IMAGE_TAG: latest
+  IMAGE_TAG:  
   DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
   DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
 
@@ -101,15 +101,15 @@ jobs:
           docker tag ${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}:${IMAGE_TAG_LTS} ${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}:${IMAGE_TAG_LTS}
           docker tag ${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}:${IMAGE_TAG_NEW} ${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}:${IMAGE_TAG_NEW}
 
-      - name: Push Docker Image to Docker Hub
+      - name: Tag Docker Image for Docker Hub
         env:
           IMAGE_NAME: "${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}"
-          IMAGE_TAG_LTS: ${{ env.IMAGE_TAG }}
-          IMAGE_TAG_NEW: ${{ steps.set-new-tag.outputs.new_tag }}
+          IMAGE_TAG_LTS: ${{ env.IMAGE_TAG }}  # lts
+          IMAGE_TAG_NEW: ${{ steps.set-new-tag.outputs.new_tag }}  # tag dinâmica (versão com data)
         run: |
-          # Push both tags (lts and version) to Docker Hub
-          docker push $IMAGE_NAME:${IMAGE_TAG_LTS}
-          docker push $IMAGE_NAME:${IMAGE_TAG_NEW}
+          # Tagueando a imagem local para Docker Hub
+          docker tag ${{ env.IMAGE_NAME }}:latest $IMAGE_NAME:${IMAGE_TAG_LTS}  # Tagueando como 'lts'
+          docker tag ${{ env.IMAGE_NAME }}:latest $IMAGE_NAME:${IMAGE_TAG_NEW}
 
 
   Update-Image-Tag-in-Deployment:
