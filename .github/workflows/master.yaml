@@ -89,9 +89,11 @@ jobs:
       - name: Docker Hub Login
         run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
 
+      - name: docker images
+        run: docker images
+
       - name: Tag Docker Image for Docker Hub
         env:
-          IMAGE_NAME: "${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}"
           IMAGE_TAG_LTS: ${{ env.IMAGE_TAG }}
           IMAGE_TAG_NEW: ${{ steps.set-new-tag.outputs.new_tag }}
         run: |
