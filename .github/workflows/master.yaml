@@ -95,14 +95,14 @@ jobs:
       - name: docker echo command
         run: echo "command - ${{ env.IMAGE_NAME }}:latest $IMAGE_NAME:${IMAGE_TAG_LTS} -- command - ${{ env.IMAGE_NAME }}:latest $IMAGE_NAME:${IMAGE_TAG_NEW}"
 
-
       - name: Tag and Push Docker Image to Docker Hub
         env:
           IMAGE_HUB_NAME: "${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}"
           IMAGE_BUILD_NAME: ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-          IMAGE_TAG_NEW: ${{ steps.set-new-tag.outputs.new_tag }}
+          # IMAGE_TAG_NEW: ${{ steps.set-new-tag.outputs.new_tag }}
         run: |
           docker tag  ${{ env.IMAGE_BUILD_NAME }} ${{ env.IMAGE_HUB_NAME }}
+          docker tag $IMAGE_NAME "${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ steps.set-new_tag.outputs.new_tag }}"
           docker push ${{ env.IMAGE_HUB_NAME }}
 
   Update-Image-Tag-in-Deployment:
