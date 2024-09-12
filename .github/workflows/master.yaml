@@ -67,31 +67,31 @@ jobs:
         env:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAG_LTS: ${{ env.IMAGE_TAG }}  # lts
-          IMAGE_TAG_NEW: ${{ env.NEW_IMAGE_TAG }}  # tag dinâmica (versão com data)
+          IMAGE_TAG_NEW: ${{ steps.set-new-tag.outputs.new_tag }}  # tag dinâmica (versão com data)
         run: |
           # Build a single image without tagging yet
-          docker build -t ${{ IMAGE_NAME }} .
+          docker build -t $IMAGE_NAME .
 
       - name: Tag Docker Image
         env:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAG_LTS: ${{ env.IMAGE_TAG }}
-          IMAGE_TAG_NEW: ${{ env.NEW_IMAGE_TAG }}
+          IMAGE_TAG_NEW: ${{ steps.set-new-tag.outputs.new_tag }}
           SWR_TAG_LTS: swr.${{ env.CLOUD_REGION }}.myhuaweicloud.com/${{ env.SWR_ORGANIZATION }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-          SWR_TAG_NEW: swr.${{ env.CLOUD_REGION }}.myhuaweicloud.com/${{ env.SWR_ORGANIZATION }}/${{ env.IMAGE_NAME }}:${{ env.NEW_IMAGE_TAG }}
+          SWR_TAG_NEW: swr.${{ env.CLOUD_REGION }}.myhuaweicloud.com/${{ env.SWR_ORGANIZATION }}/${{ env.IMAGE_NAME }}:${{ steps.set-new-tag.outputs.new_tag }}
         run: |
           # Tagging the built image with both 'lts' and the dynamic version tag
-          docker tag ${{ IMAGE_NAME }} ${{ SWR_TAG_LTS }}
-          docker tag ${{ IMAGE_NAME }} ${{ SWR_TAG_NEW }}
+          docker tag $IMAGE_NAME $SWR_TAG_LTS
+          docker tag $IMAGE_NAME $SWR_TAG_NEW
 
       - name: Push Docker Image to SWR
         env:
           SWR_TAG_LTS: swr.${{ env.CLOUD_REGION }}.myhuaweicloud.com/${{ env.SWR_ORGANIZATION }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-          SWR_TAG_NEW: swr.${{ env.CLOUD_REGION }}.myhuaweicloud.com/${{ env.SWR_ORGANIZATION }}/${{ env.IMAGE_NAME }}:${{ env.NEW_IMAGE_TAG }}
+          SWR_TAG_NEW: swr.${{ env.CLOUD_REGION }}.myhuaweicloud.com/${{ env.SWR_ORGANIZATION }}/${{ env.IMAGE_NAME }}:${{ steps.set-new-tag.outputs.new_tag }}
         run: |
           # Push both tags (lts and version)
-          docker push ${{ SWR_TAG_LTS }}
-          docker push ${{ SWR_TAG_NEW }}
+          docker push $SWR_TAG_LTS
+          docker push $SWR_TAG_NEW
 
       - name: Docker Hub Login
         run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
@@ -100,21 +100,21 @@ jobs:
         env:
           IMAGE_NAME: "${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}"
           IMAGE_TAG_LTS: ${{ env.IMAGE_TAG }}
-          IMAGE_TAG_NEW: ${{ env.NEW_IMAGE_TAG }}
+          IMAGE_TAG_NEW: ${{ steps.set-new-tag.outputs.new_tag }}
         run: |
           # Tagging the image for Docker Hub
-          docker tag ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} ${{ IMAGE_NAME }}:${{ IMAGE_TAG_LTS }}
-          docker tag ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} ${{ IMAGE_NAME }}:${{ IMAGE_TAG_NEW }}
+          docker tag $IMAGE_NAME:${IMAGE_TAG_LTS} $IMAGE_NAME:${IMAGE_TAG_LTS}
+          docker tag $IMAGE_NAME:${IMAGE_TAG_NEW} $IMAGE_NAME:${IMAGE_TAG_NEW}
 
       - name: Push Docker Image to Docker Hub
         env:
           IMAGE_NAME: "${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}"
           IMAGE_TAG_LTS: ${{ env.IMAGE_TAG }}
-          IMAGE_TAG_NEW: ${{ env.NEW_IMAGE_TAG }}
+          IMAGE_TAG_NEW: ${{ steps.set-new-tag.outputs.new_tag }}
         run: |
           # Push both tags (lts and version) to Docker Hub
-          docker push ${{ IMAGE_NAME }}:${{ IMAGE_TAG_LTS }}
-          docker push ${{ IMAGE_NAME }}:${{ IMAGE_TAG_NEW }}
+          docker push $IMAGE_NAME:${IMAGE_TAG_LTS}
+          docker push $IMAGE_NAME:${IMAGE_TAG_NEW}
 
 
   Update-Image-Tag-in-Deployment:
