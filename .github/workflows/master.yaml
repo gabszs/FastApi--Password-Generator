@@ -60,13 +60,12 @@ jobs:
         run: |
           VERSION=$(poetry version --short)
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
-          echo "::set-output name=version::${VERSION}"
 
       - name: Build Docker Image
         id: build-image
         env:
           IMAGE_NAME: ${{ secrets.DOCKER_HUB_USERNAME }}/my-app
-          IMAGE_TAG: ${{ steps.get-version.outputs.version }}
+          IMAGE_TAG: ${{ env.VERSION }}
         run: |
           docker build -t $IMAGE_NAME:${{ env.IMAGE_TAG }} -t $IMAGE_NAME:latest .
 
@@ -80,7 +79,7 @@ jobs:
         env:
           IMAGE_HUB_NAME: "${{ secrets.DOCKER_HUB_USERNAME }}/my-app"
         run: |
-          docker push $IMAGE_HUB_NAME:${{ steps.get-version.outputs.version }}
+          docker push $IMAGE_HUB_NAME:${{ env.VERSION }}
           docker push $IMAGE_HUB_NAME:latest
 
   Update-Image-Tag-in-Deployment:
@@ -96,7 +95,7 @@ jobs:
 
       - name: Set New Image Tag
         run: |
-          NEW_IMAGE_TAG="${{ needs.push-to-dockerhub.outputs.version }}"
+          NEW_IMAGE_TAG="${{ env.VERSION }}"
           echo "Using NEW_IMAGE_TAG=${NEW_IMAGE_TAG}"
 
       - name: Checkout GitOps Branch
