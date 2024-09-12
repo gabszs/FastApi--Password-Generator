@@ -60,6 +60,7 @@ jobs:
         run: |
           VERSION=$(poetry version --short)
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
+          echo "::set-output name=version::${VERSION}"
 
       - name: Build Docker Image
         id: build-image
@@ -95,7 +96,7 @@ jobs:
 
       - name: Set New Image Tag
         run: |
-          NEW_IMAGE_TAG="${{ env.VERSION }}"
+          NEW_IMAGE_TAG="${{ needs.push-to-dockerhub.outputs.version }}"
           echo "Using NEW_IMAGE_TAG=${NEW_IMAGE_TAG}"
 
       - name: Checkout GitOps Branch
