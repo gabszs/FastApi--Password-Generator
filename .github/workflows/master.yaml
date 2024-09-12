@@ -47,10 +47,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.11.1"
+
+      - name: Install Poetry
+        run: pipx install poetry
+
       - name: Get Version from pyproject.toml
         id: get-version
         run: |
-          VERSION=$(grep 'version = ' pyproject.toml | sed -E 's/version = "([^"]+)"/\1/')
+          VERSION=$(poetry version --short)
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
           echo "::set-output name=version::${VERSION}"
 
