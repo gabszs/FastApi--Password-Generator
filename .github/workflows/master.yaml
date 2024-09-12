@@ -65,7 +65,7 @@ jobs:
       - name: Build Docker Image
         id: build-image
         env:
-          IMAGE_NAME: ${{ secrets.DOCKER_HUB_USERNAME }}/my-app
+          IMAGE_NAME: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}
           VERSION: ${{ steps.get-version.outputs.version }}
         run: |
           docker build -t $IMAGE_NAME:latest -t $IMAGE_NAME:$VERSION .
@@ -77,8 +77,6 @@ jobs:
         run: docker images
 
       - name: Tag and Push Docker Image to Docker Hub
-        env:
-          IMAGE_HUB_NAME: "${{ secrets.DOCKER_HUB_USERNAME }}/my-app"
         run: |
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }} --all-tags
 
