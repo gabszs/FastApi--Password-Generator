@@ -66,9 +66,8 @@ jobs:
         id: build-image
         env:
           IMAGE_NAME: ${{ secrets.DOCKER_HUB_USERNAME }}/my-app
-          IMAGE_TAG: ${{ env.VERSION }}
         run: |
-          docker build -t $IMAGE_NAME:${{ env.IMAGE_TAG }} -t $IMAGE_NAME:latest .
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest -t ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}:${VERSION}.
 
       - name: Docker Hub Login
         run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
@@ -80,9 +79,8 @@ jobs:
         env:
           IMAGE_HUB_NAME: "${{ secrets.DOCKER_HUB_USERNAME }}/my-app"
         run: |
-          docker push $IMAGE_HUB_NAME:${{ env.VERSION }}
-          docker push $IMAGE_HUB_NAME:latest
-
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }} --all-tags
+          
   Update-Image-Tag-in-Deployment:
     runs-on: ubuntu-latest
     needs: [build-and-test, push-to-dockerhub]
