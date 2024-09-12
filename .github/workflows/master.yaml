@@ -38,7 +38,7 @@ jobs:
 
       - name: Run tests
         run: poetry run task test
-        
+
   push-to-dockerhub:
     runs-on: ubuntu-latest
     needs: build-and-test
@@ -66,7 +66,7 @@ jobs:
         id: build-image
         env:
           IMAGE_NAME: ${{ secrets.DOCKER_HUB_USERNAME }}/my-app
-          IMAGE_TAG: ${{ env.VERSION }}
+          IMAGE_TAG: ${{ steps.get-version.outputs.version }}
         run: |
           docker build -t $IMAGE_NAME:${{ env.IMAGE_TAG }} -t $IMAGE_NAME:latest .
 
@@ -80,14 +80,9 @@ jobs:
         env:
           IMAGE_HUB_NAME: "${{ secrets.DOCKER_HUB_USERNAME }}/my-app"
         run: |
-          docker push $IMAGE_HUB_NAME:${{ env.VERSION }}
+          docker push $IMAGE_HUB_NAME:${{ steps.get-version.outputs.version }}
           docker push $IMAGE_HUB_NAME:latest
 
-  Update-Image-Tag-in-Deployment:
-    runs-on: ubuntu-latest
-    needs: [build-and-test, push-to-dockerhub]
-
-    steps:
       - name: Checkout Repository
         uses: actions/checkout@v3 
         with:
@@ -96,7 +91,7 @@ jobs:
 
       - name: Set New Image Tag
         run: |
-          NEW_IMAGE_TAG="${{ needs.push-to-dockerhub.outputs.version }}"
+          NEW_IMAGE_TAG="${{ steps.get-version.outputs.version }}"
           echo "Using NEW_IMAGE_TAG=${NEW_IMAGE_TAG}"
 
       - name: Checkout GitOps Branch
