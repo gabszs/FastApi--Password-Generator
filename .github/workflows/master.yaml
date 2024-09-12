@@ -108,6 +108,8 @@ jobs:
           IMAGE_TAG_NEW: ${{ steps.set-new-tag.outputs.new_tag }}  # tag dinâmica (versão com data)
         run: |
           # Tagueando a imagem local para Docker Hub
+          echo "command - ${{ env.IMAGE_NAME }}:latest $IMAGE_NAME:${IMAGE_TAG_LTS}"
+          echo "command - ${{ env.IMAGE_NAME }}:latest $IMAGE_NAME:${IMAGE_TAG_NEW}"
           docker tag ${{ env.IMAGE_NAME }}:latest $IMAGE_NAME:${IMAGE_TAG_LTS}  # Tagueando como 'lts'
           docker tag ${{ env.IMAGE_NAME }}:latest $IMAGE_NAME:${IMAGE_TAG_NEW}
 
