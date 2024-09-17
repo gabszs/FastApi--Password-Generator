@@ -7,7 +7,7 @@ from app.router.password_routes import router
 app = FastAPI(
     title="Password Generator",
     version="1.0.0",
-    description="Password api to generate random pins and passwords with cicd pipe",
+    description="Password api to generate random pins and passwords with cicd pipe, test hadson",
     contact={
         "name": "GabrielCarvalho",
         "email": "gabrielcarvalho.workk@gmail.com",
