@@ -9,12 +9,12 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`www.password-svc.portfile.dev`)
+    - match: Host(`www.password.gabrielcarvalho.dev`)
       kind: Rule
       services:
         - name: password-generator-svc
           port: 80
-    - match: Host(`password-svc.portfile.dev`)
+    - match: Host(`password.gabrielcarvalho.dev`)
       kind: Rule
       services:
         - name: password-generator-svc
@@ -22,4 +22,4 @@ spec:
       middlewares:
         - name: default-headers
   tls:
-    secretName: portfile-tls
+    secretName: gabrielcarvalho-tls
