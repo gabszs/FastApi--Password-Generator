@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: password-generator
+  labels:
+    name: password-generator
+    environment: production
