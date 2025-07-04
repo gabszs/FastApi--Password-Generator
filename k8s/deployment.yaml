@@ -18,6 +18,9 @@ spec:
         image: gabzsz/password-generator:0.1.4
         ports:
         - containerPort: 80
+        envFrom:
+          - configMapRef:
+              name: config-map
         resources:
           limits:
             memory: "1Gi"
