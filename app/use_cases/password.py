@@ -6,9 +6,11 @@ from string import digits
 from string import punctuation
 from typing import List
 
+from app.core.telemetry import instrument
 from app.core.telemetry import logger
 
 
+@instrument
 class PasswordGenerator:
     """
     Class for generating random passwords and PIN codes.
