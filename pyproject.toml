@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "passwordgenerator"
-version = "0.1.4"
+version = "0.1.5"
 description = "This package provides a simple and efficient solution for generating random passwords with options for uppercase letters, lowercase letters, and optional accents. The package includes a user-friendly API, robust algorithms for generating secure passwords, and features to verify password strength. Overall, this package is a useful and versatile tool for ensuring password security in applications and systems."
 authors = ["GabrielCarvalho <gabrielcarvalho.workk@gmail.com>"]
 license = "Open source license"
@@ -24,6 +24,10 @@ taskipy = "^1.13.0"
 ruff = "^0.5.7"
 pytest-cov = "^5.0.0"
 pytest = "^8.3.2"
+
+[tool.poetry.group.telemetry.dependencies]
+opentelemetry-distro = "^0.54b1"
+opentelemetry-exporter-otlp = "^1.33.1"
 
 [build-system]
 requires = ["poetry-core"]
