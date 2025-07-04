@@ -1,3 +1,4 @@
+import logging
 import os
 from contextlib import asynccontextmanager
 
@@ -6,8 +7,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from uvicorn import run
 
-from app.core.telemetry import logger
 from app.router.v1 import routers
+
+
+logger = logging.getLogger()
 
 service_name = os.getenv("OTEL_SERVICE_NAME", "pve-prod-password-generator-api")
 
