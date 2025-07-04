@@ -1,11 +1,26 @@
+import os
+from contextlib import asynccontextmanager
+
 from fastapi import APIRouter
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from uvicorn import run
 
+from app.core.telemetry import logger
 from app.router.v1 import routers
 
+service_name = os.getenv("OTEL_SERVICE_NAME", "pve-prod-password-generator-api")
+
+
 router = APIRouter()
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    logger.info(f"{service_name} initialization started.")
+    yield
+    logger.info(f"{service_name} shutdown completed.")
+
 
 app = FastAPI(
     title="Password Generator",

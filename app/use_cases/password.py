@@ -1,5 +1,4 @@
 # script to generate a Random Password
-import asyncio
 from random import shuffle
 from secrets import choice
 from string import ascii_letters
@@ -7,44 +6,21 @@ from string import digits
 from string import punctuation
 from typing import List
 
+from app.core.telemetry import logger
+
 
 class PasswordGenerator:
     """
     Class for generating random passwords and PIN codes.
-
-    Methods:
-    async_pin(pin_lenght: int) -> int:
-        Generates a random PIN code with the given length.
-
-    async_password(password_length: int, has_ponctuation: bool = False) -> str:
-        Generates a random password with the given length and optionally with punctuations.
     """
 
     async def async_pin(self, pin_lenght: int) -> int:
-        """
-        Generates a random PIN code with the given length.
-
-        Args:
-        pin_lenght (int): The length of the generated PIN code.
-
-        Returns:
-        int: The generated PIN code.
-        """
         pin_range = "1234567890"
         pin_choice = "".join(choice(pin_range) for _ in range(int(pin_lenght)))
+        logger.info(f"Generated PIN of length {pin_lenght}")
         return pin_choice
 
     async def async_password(self, password_length: int, has_ponctuation: bool = False) -> str:
-        """
-        Generates a random password with the given length and optionally with punctuations.
-
-        Args:
-        password_length (int): The length of the generated password.
-        has_ponctuation (bool, optional): Whether or not to include punctuations in the password. Defaults to False.
-
-        Returns:
-        str: The generated password.
-        """
         minimum_string = choice(ascii_letters) + choice(digits) + choice(digits + ascii_letters)
         letters = ascii_letters + digits
 
@@ -52,19 +28,20 @@ class PasswordGenerator:
             minimum_string = list(minimum_string)
             del minimum_string[0]
             minimum_string = "".join(minimum_string)
-
             minimum_string += choice(punctuation)
             letters += punctuation
+            logger.info("Punctuation enabled for password generation")
 
         if password_length == 3:
-            password = "".join(choice(minimum_string) for _ in len(minimum_string))
+            password = "".join(choice(minimum_string) for _ in range(len(minimum_string)))
+            logger.info("Generated short password with length 3")
             return PasswordGenerator.lower_upper_func(password)
-
         else:
             password_choice = "".join(choice(letters) for _ in range(password_length - 3)) + minimum_string
             password_list = list(password_choice)
             shuffle(password_list)
             password = "".join(password_list)
+            logger.info(f"Generated password of length {password_length}")
             return PasswordGenerator.lower_upper_func(password)
 
     async def async_complex_password(
@@ -78,6 +55,7 @@ class PasswordGenerator:
         password = await self.async_password(password_length=adicional_lenght, has_ponctuation=has_ponctuation)
 
         if suffle_string_inject:
+            logger.info("Shuffling injected strings")
             for count, string in enumerate(string_inject):
                 string = list(string)
                 shuffle(string)
@@ -89,7 +67,9 @@ class PasswordGenerator:
         shuffle(password)
 
         password = "".join(password)
-
+        logger.info(
+            f"Generated complex password with {len(string_inject)} injected strings and {len(char_inject)} characters"
+        )
         return password
 
     @classmethod
@@ -98,47 +78,22 @@ class PasswordGenerator:
             password = list(password)
             randchoice = choice(list(range(len(password))))
             num = password[randchoice]
-
             while not num.isalpha():
                 randchoice = choice(list(range(len(password))))
                 num = password[randchoice]
-
             password[randchoice] = password[randchoice].lower()
+            logger.info("Adjusted all-uppercase password by lowering one character")
             return "".join(password)
 
         elif password.lower() == password:
             password = list(password)
             randchoice = choice(list(range(len(password))))
             num = password[randchoice]
-
             while not num.isalpha():
                 randchoice = choice(list(range(len(password))))
                 num = password[randchoice]
-
             password[randchoice] = password[randchoice].upper()
+            logger.info("Adjusted all-lowercase password by uppercasing one character")
             return "".join(password)
 
-        else:
-            return password
-
-
-if __name__ == "__main__":
-    pg = PasswordGenerator()
-
-    async def test():
-        password = await pg.async_complex_password(
-            char_inject=["a", "b", "/0"],
-            adicional_lenght=10,
-            has_ponctuation=True,
-            string_inject=["Gab", "tao", "2018"],
-            suffle_string_inject=False,
-        )
         return password
-
-    async def main():
-        password = await test()
-        print(password)
-
-    asyncio.run(main())
-
-    # print(password(10, ponctuation=False))
