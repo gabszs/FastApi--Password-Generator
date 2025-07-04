@@ -1,8 +1,11 @@
+from fastapi import APIRouter
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from uvicorn import run
 
-from app.router.password_routes import router
+from app.router.v1 import routers
 
+router = APIRouter()
 
 app = FastAPI(
     title="Password Generator",
@@ -14,6 +17,17 @@ app = FastAPI(
         "url": "https://www.linkedin.com/in/gabzsz",
     },
 )
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Liberar para todos os domínios (ajuste conforme necessário)
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+app.include_router(router=routers)
 app.include_router(router=router)
 
 if __name__ == "__main__":
