@@ -24,8 +24,6 @@ COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 
 COPY app ./app
 COPY pyproject.toml poetry.lock ./
-COPY migrations ./migrations
-COPY alembic.ini ./
 
 EXPOSE 80
 RUN opentelemetry-bootstrap -a install
