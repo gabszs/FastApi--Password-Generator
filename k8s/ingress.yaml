@@ -1,25 +1,25 @@
-# apiVersion: traefik.io/v1alpha1
-# kind: IngressRoute
-# metadata:
-#   name: password-generator-ingress
-#   namespace: password-generator
-#   annotations:
-#     kubernetes.io/ingress.class: traefik-external
-# spec:
-#   entryPoints:
-#     - websecure
-#   routes:
-#     - match: Host(`www.password.gabrielcarvalho.dev`)
-#       kind: Rule
-#       services:
-#         - name: password-generator-svc
-#           port: 80
-#     - match: Host(`password.gabrielcarvalho.dev`)
-#       kind: Rule
-#       services:
-#         - name: password-generator-svc
-#           port: 80
-#       middlewares:
-#         - name: default-headers
-#   tls:
-#     secretName: gabrielcarvalho-tls
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: password-generator-ingress
+  namespace: password-generator
+  annotations:
+    kubernetes.io/ingress.class: traefik-external
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`www.password.gabrielcarvalho.dev`)
+      kind: Rule
+      services:
+        - name: password-generator-svc
+          port: 80
+    - match: Host(`password.gabrielcarvalho.dev`)
+      kind: Rule
+      services:
+        - name: password-generator-svc
+          port: 80
+      middlewares:
+        - name: default-headers
+  tls:
+    secretName: certificate-tls
