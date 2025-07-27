@@ -1,0 +1,31 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: password-generator-scaledobject
+  namespace: password-generator
+spec:
+  scaleTargetRef:
+    kind: Deployment
+    name: password-generator-deployment             # Nome do Deployment que será escalado
+  minReplicaCount: 1
+  maxReplicaCount: 10
+  cooldownPeriod: 30           # Tempo para reduzir réplicas após ociosidade (segundos)
+  pollingInterval: 15          # Intervalo de checagem (segundos)
+  triggers:
+    # Escalonamento baseado em CPU
+    - type: cpu
+      metadata:
+        type: Utilization
+        value: "60"            # Equivalente a averageUtilization: 60
+    # Escalonamento baseado em memória
+    - type: memory
+      metadata:
+        type: Utilization
+        value: "75"            # Equivalente a averageUtilization: 75
+    # Escalonamento baseado em cron
+    - type: cron
+      metadata:
+        timezone: "America/Sao_Paulo"
+        start: "25 21 * * *"   # Inicia às 21:25
+        end: "28 21 * * *"     # Termina às 21:28
+        desiredReplicas: "5"   # Número de réplicas durante o cron
