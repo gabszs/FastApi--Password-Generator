@@ -27,5 +27,5 @@ spec:
       metadata:
         timezone: "America/Sao_Paulo"
         start: "25 21 * * *"   # Inicia às 21:25
-        end: "28 21 * * *"     # Termina às 21:28
+        end: "35 21 * * *"     # Termina às 21:28
         desiredReplicas: "5"   # Número de réplicas durante o cron
