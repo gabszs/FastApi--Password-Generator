@@ -4,7 +4,7 @@ metadata:
   name: password-generator-deployment
   namespace: password-generator
 spec:
-  replicas: 2
+  replicas: 4
   selector:
     matchLabels:
       app: passwordservice
