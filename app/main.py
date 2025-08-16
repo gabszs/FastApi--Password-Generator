@@ -12,12 +12,7 @@ from opentelemetry.trace.span import Span
 
 from app.router.v1 import routers
 
-
-logger = logging.getLogger()
-
 service_name = os.getenv("OTEL_SERVICE_NAME", "pve-prod-password-generator-api")
-
-
 router = APIRouter()
 
 
@@ -30,6 +25,10 @@ def add_trace_id_header(response: Response):
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    logger = logging.getLogger()
+    logger.setLevel(logging.INFO)
+    logging.getLogger("opentelemetry").propagate = False
+
     logger.info(f"{service_name} initialization started.")
     yield
     logger.info(f"{service_name} shutdown completed.")
