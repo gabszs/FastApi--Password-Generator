@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "passwordgenerator"
-version = "0.1.7"
+version = "0.2.0"
 description = "This package provides a simple and efficient solution for generating random passwords with options for uppercase letters, lowercase letters, and optional accents. The package includes a user-friendly API, robust algorithms for generating secure passwords, and features to verify password strength. Overall, this package is a useful and versatile tool for ensuring password security in applications and systems."
 authors = ["GabrielCarvalho <gabrielcarvalho.workk@gmail.com>"]
 license = "Open source license"
