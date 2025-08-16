@@ -3,7 +3,7 @@ import os
 from contextlib import asynccontextmanager
 
 from fastapi import APIRouter
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi import Response
 from fastapi.middleware.cors import CORSMiddleware
 from uvicorn import run
