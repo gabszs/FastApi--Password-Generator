@@ -8,7 +8,7 @@ spec:
     kind: Deployment
     name: password-generator-deployment             # Nome do Deployment que será escalado
   minReplicaCount: 1
-  maxReplicaCount: 10
+  maxReplicaCount: 5
   cooldownPeriod: 30           # Tempo para reduzir réplicas após ociosidade (segundos)
   pollingInterval: 15          # Intervalo de checagem (segundos)
   triggers:
@@ -22,10 +22,10 @@ spec:
       metadata:
         type: Utilization
         value: "75"            # Equivalente a averageUtilization: 75
-    # Escalonamento baseado em cron
-    - type: cron
-      metadata:
-        timezone: "America/Sao_Paulo"
-        start: "25 21 * * *"   # Inicia às 21:25
-        end: "35 21 * * *"     # Termina às 21:28
-        desiredReplicas: "5"   # Número de réplicas durante o cron
+    # # Escalonamento baseado em cron
+    # - type: cron
+    #   metadata:
+    #     timezone: "America/Sao_Paulo"
+    #     start: "25 21 * * *"   # Inicia às 21:25
+    #     end: "35 21 * * *"     # Termina às 21:28
+    #     desiredReplicas: "5"   # Número de réplicas durante o cron
