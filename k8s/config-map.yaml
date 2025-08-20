@@ -5,9 +5,9 @@ metadata:
   namespace: password-generator
 data:
   OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED: "true"
-  OTEL_EXPORTER_OTLP_ENDPOINT: "https://collector.gabrielcarvalho.dev"
+  OTEL_EXPORTER_OTLP_ENDPOINT: "https://collector-signoz.gabrielcarvalho.dev"
   OTEL_EXPORTER_OTLP_INSECURE: "false"
   OTEL_LOGS_EXPORTER: "otlp"
   OTEL_SERVICE_NAME: "pve-prod-password-generetor-api"
   OTEL_EXPORTER_OTLP_PROTOCOL: "http/protobuf"
-  OTEL_METRICS_EXPORTER: "console"
+  OTEL_METRICS_EXPORTER: "otlp"
