@@ -13,11 +13,23 @@ async def health():
 async def debug(request: Request):
     headers = request.headers
     return {
-        "country": headers.get("CF-IPCountry"),
-        "city": headers.get("CF-IPCity"),
-        "continent": headers.get("CF-IPContinent"),
-        "latitude": headers.get("CF-IPLatitude"),
-        "longitude": headers.get("CF-IPLongitude"),
-        "postal_code": headers.get("CF-IPPostalCode"),
-        "timezone": headers.get("CF-IPTimezone")
+        "IPcountry": headers.get("CF-IPCountry"),
+        "IPcity": headers.get("CF-IPCity"),
+        "IPcontinent": headers.get("CF-IPContinent"),
+        "IPlatitude": headers.get("CF-IPLatitude"),
+        "IPlongitude": headers.get("CF-IPLongitude"),
+        "IPpostal_code": headers.get("CF-IPPostalCode"),
+        "IPtimezone": headers.get("CF-IPTimezone"),
+        "asOrganization": headers.get("CF-IPASNOrganization"),  # ISP
+        "country": headers.get("country"),
+        "city": headers.get("city"),
+        "continent": headers.get("continent"),
+        "region": headers.get("region"),
+        "regionCode": headers.get("regionCode"),
+        "timezone": headers.get("timezone"),
+        "longitude": float(headers.get("longitude")) if headers.get("CF-IPLongitude") else None,
+        "latitude": float(headers.get("latitude")) if headers.get("CF-IPLatitude") else None,
+        "postalCode": headers.get("postalCode"),
     }
+
+    return GeoLocation(**geo)
