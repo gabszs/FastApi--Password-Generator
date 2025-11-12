@@ -31,5 +31,3 @@ async def debug(request: Request):
         "latitude": float(headers.get("latitude")) if headers.get("CF-IPLatitude") else None,
         "postalCode": headers.get("postalCode"),
     }
-
-    return GeoLocation(**geo)
