@@ -1,5 +1,4 @@
-from fastapi import APIRouter
-from fastapi import Request
+from fastapi import APIRouter, Request
 
 from app.core.telemetry import logger
 
@@ -14,6 +13,8 @@ async def health():
 
 @router.get("/debug")
 async def debug(request: Request):
+    logger.warning("Debug endpoint accessed.")
+    logger.info(f"Request headers: {request.headers}")
     return {
         "headers": dict(request.headers),
         "geo": {

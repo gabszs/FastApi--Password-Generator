@@ -28,7 +28,7 @@ def add_trace_id_header(response: Response):
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.setLevel(logging.INFO)
+    # logger.setLevel(logging.INFO)
     logging.getLogger("opentelemetry").propagate = False
 
     logger.info(f"{service_name} initialization started.")
