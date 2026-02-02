@@ -82,3 +82,4 @@ async def otel_setup(request: Request, call_next) -> None:
     event["http.outcome"] = "error" if is_error else "success"
     span.set_attributes(event)
     response.headers["x-trace-id"] = format(trace_id, "032x")
+    return response
