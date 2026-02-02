@@ -77,8 +77,8 @@ async def otel_setup(request: Request, call_next) -> None:
     is_rate_limit = status_code == 429
 
     event["http.response.status_code"] = status_code
-    event["duration_ms"] = (datetime.now() - start_time).total_seconds() * 1000
-    event["ratelimit.triggered"] = is_rate_limit
-    event["outcome"] = "error" if is_error else "success"
-
+    event["http.duration_ms"] = (datetime.now() - start_time).total_seconds() * 1000
+    event["http.ratelimit.triggered"] = is_rate_limit
+    event["http.outcome"] = "error" if is_error else "success"
+    span.set_attributes(event)
     response.headers["x-trace-id"] = format(trace_id, "032x")
