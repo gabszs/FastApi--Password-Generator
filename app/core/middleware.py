@@ -2,7 +2,7 @@ import os
 from fastapi import Request
 from datetime import datetime
 from opentelemetry.trace import get_current_span
-from user_agents import parse
+from ua_parser import parse as parse_ua
 
 
 async def otel_setup(request: Request, call_next) -> None:
@@ -14,7 +14,7 @@ async def otel_setup(request: Request, call_next) -> None:
     client_address = request.headers.get("cf-connecting-ip")
     user_agent_str = request.headers.get("user-agent")
 
-    ua = parse(user_agent_str) if user_agent_str else None
+    ua = parse_ua(user_agent_str) if user_agent_str else None
     sec_ch_ua_platform = request.headers.get("sec-ch-ua-platform")
 
     # Extrai o body se existir
@@ -47,13 +47,13 @@ async def otel_setup(request: Request, call_next) -> None:
         "cloud.availability_zone": request.headers.get("cf-ray", "").split("-")[-1] if request.headers.get("cf-ray") else None,
         # User agent attributes
         "user_agent.original": user_agent_str,
-        "user_agent.device.model": ua.device.model if ua else None,
-        "user_agent.device.type": ua.device.family if ua else None,
-        "user_agent.device.vendor": ua.device.brand if ua else None,
-        "user_agent.os": ua.os.family if ua else None,
-        "user_agent.os.version": ua.os.version_string if ua else None,
-        "user_agent.browser": ua.browser.family if ua else None,
-        "user_agent.browser_version": ua.browser.version_string if ua else None,
+        "user_agent.device.model": ua.device.model if ua and ua.device else None,
+        "user_agent.device.type": ua.device.family if ua and ua.device else None,
+        "user_agent.device.vendor": ua.device.brand if ua and ua.device else None,
+        "user_agent.os": ua.os.family if ua and ua.os else None,
+        "user_agent.os.version": f"{ua.os.major}.{ua.os.minor}" if ua and ua.os and ua.os.major else None,
+        "user_agent.browser": ua.user_agent.family if ua and ua.user_agent else None,
+        "user_agent.browser_version": f"{ua.user_agent.major}.{ua.user_agent.minor}" if ua and ua.user_agent and ua.user_agent.major else None,
         # Browser attributes (Client Hints)
         "browser.brands": request.headers.get("sec-ch-ua"),
         "browser.mobile": request.headers.get("sec-ch-ua-mobile") == "?1",

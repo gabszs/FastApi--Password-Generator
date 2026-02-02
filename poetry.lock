@@ -1883,6 +1883,86 @@ files = [
 typing-extensions = ">=4.12.0"
 
 [[package]]
+name = "ua-parser"
+version = "1.0.1"
+description = "Python port of Browserscope's user agent parser"
+optional = false
+python-versions = ">=3.9"
+groups = ["main"]
+files = [
+    {file = "ua_parser-1.0.1-py3-none-any.whl", hash = "sha256:b059f2cb0935addea7e551251cbbf42e9a8872f86134163bc1a4f79e0945ffea"},
+    {file = "ua_parser-1.0.1.tar.gz", hash = "sha256:f9d92bf19d4329019cef91707aecc23c6d65143ad7e29a233f0580fb0d15547d"},
+]
+
+[package.dependencies]
+ua-parser-builtins = "*"
+ua-parser-rs = {version = "*", optional = true, markers = "extra == \"regex\""}
+
+[package.extras]
+re2 = ["google-re2"]
+regex = ["ua-parser-rs"]
+yaml = ["PyYaml"]
+
+[[package]]
+name = "ua-parser-builtins"
+version = "202601"
+description = "Precompiled rules for User Agent Parser"
+optional = false
+python-versions = ">=3.10"
+groups = ["main"]
+files = [
+    {file = "ua_parser_builtins-202601-py3-none-any.whl", hash = "sha256:f5dc93b0f53724dcd5c3eb79edb0aea281cb304a2c02a9436cbeb8cfb8bc4ad1"},
+]
+
+[[package]]
+name = "ua-parser-rs"
+version = "0.1.4"
+description = "native accelerator for ua-parser"
+optional = false
+python-versions = ">=3.10"
+groups = ["main"]
+files = [
+    {file = "ua_parser_rs-0.1.4-cp310-abi3-macosx_10_12_x86_64.whl", hash = "sha256:81c2d54827f33442ecf245c5b869adc49bc55cd90d87a32d279a51b53e6d1667"},
+    {file = "ua_parser_rs-0.1.4-cp310-abi3-macosx_11_0_arm64.whl", hash = "sha256:d5276b7620c2c31abb6bd208584bb5155bf3fe8735e30336c22b9d827dcb35fa"},
+    {file = "ua_parser_rs-0.1.4-cp310-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:0678f65b79a77d03f8500ea14aaee0095368d183a9c386236c55af7499368249"},
+    {file = "ua_parser_rs-0.1.4-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:6b0b5af04aeabd70f72b0136b0aacb267a795e6362b3714d574f3814d1d6e509"},
+    {file = "ua_parser_rs-0.1.4-cp310-abi3-manylinux_2_34_aarch64.whl", hash = "sha256:2bc015ae79d483aa5bba2ab804d5b508b34d1aee293edd3128149a30e265a334"},
+    {file = "ua_parser_rs-0.1.4-cp310-abi3-manylinux_2_34_x86_64.whl", hash = "sha256:7df3dafb9fb1689eeaff105d9b7d8a1ef9bb0ea3ff4b14f9b337826b8ffce2a8"},
+    {file = "ua_parser_rs-0.1.4-cp310-abi3-win_amd64.whl", hash = "sha256:4cc9120e286b7346e29228addd604c61543cb2718afa647d9c9991bcfc11520c"},
+    {file = "ua_parser_rs-0.1.4-cp310-abi3-win_arm64.whl", hash = "sha256:5c0102fc294fc2fe586b9b9a49fcdfad4d85410ffc35c1ba89c0206c16f60bae"},
+    {file = "ua_parser_rs-0.1.4-cp314-cp314t-macosx_10_12_x86_64.whl", hash = "sha256:84b77da48aa411132fc58a3e86c5fad39c51bec6c6b4ed404184f8fef014e1f5"},
+    {file = "ua_parser_rs-0.1.4-cp314-cp314t-macosx_11_0_arm64.whl", hash = "sha256:5ed66e43c775dd36bf173503798ef1df86e6d944cf900c5ad8884a26c162873e"},
+    {file = "ua_parser_rs-0.1.4-cp314-cp314t-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:244719b620d86ab088b6842672cdc5369e3ffa30d64032149f882777cccfa18f"},
+    {file = "ua_parser_rs-0.1.4-cp314-cp314t-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:30b9cbf6ba4f7e061a52765a4cbae4ce8e103308bcd5ef7a7218fb6ce54c746e"},
+    {file = "ua_parser_rs-0.1.4-cp314-cp314t-manylinux_2_34_aarch64.whl", hash = "sha256:e3386970645cc4872a1c7aca76267ac6a2b316bae0353e690271bba565c87077"},
+    {file = "ua_parser_rs-0.1.4-cp314-cp314t-manylinux_2_34_x86_64.whl", hash = "sha256:495bc3f55c8f1fb2d93b26e9939a24e0f03b8255422f42d4d0d5aa64138f5ba1"},
+    {file = "ua_parser_rs-0.1.4-cp314-cp314t-win_amd64.whl", hash = "sha256:25ccd1584e052c8903a3c3806ec7165f04bb31bb346356ab29d19a7a78d20970"},
+    {file = "ua_parser_rs-0.1.4-cp314-cp314t-win_arm64.whl", hash = "sha256:294c3b6a4e44d48d95d66f688a25a48222b4056aee2fb2a1d7ba28425a5e06c9"},
+    {file = "ua_parser_rs-0.1.4-graalpy311-graalpy242_311_native-macosx_10_12_x86_64.whl", hash = "sha256:3d8dbf7c9c25b40bb1eca64f0b6c7c9aa6a607257aa70befe6908b555d89aa14"},
+    {file = "ua_parser_rs-0.1.4-graalpy311-graalpy242_311_native-macosx_11_0_arm64.whl", hash = "sha256:42901c88471465d61c72fb5a0d9dff6bb99adea702ea1f8ba0f33279dd24405b"},
+    {file = "ua_parser_rs-0.1.4-graalpy311-graalpy242_311_native-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:c64aa6fbda7378a80daada3bac854f93f8e8052bf53a53a7d09b1d2801c89942"},
+    {file = "ua_parser_rs-0.1.4-graalpy311-graalpy242_311_native-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:06f264eedb534651c127ee1ce5566b0847a3596e3e61f605be8da54cedd7e9a0"},
+    {file = "ua_parser_rs-0.1.4-graalpy311-graalpy242_311_native-manylinux_2_34_aarch64.whl", hash = "sha256:30208120db3bc4c47e466437c23f666205cc72b593603f74e10c39100fd84288"},
+    {file = "ua_parser_rs-0.1.4-graalpy311-graalpy242_311_native-manylinux_2_34_x86_64.whl", hash = "sha256:d5c22d77d2eff03bdde727187e2179abc2638e0be56f9b491370d0519af33917"},
+    {file = "ua_parser_rs-0.1.4-graalpy311-graalpy242_311_native-win_amd64.whl", hash = "sha256:09092d86fb8238d6b5f13f73fd3477002ef3e39039b6956fe258c3cc4fc98a46"},
+    {file = "ua_parser_rs-0.1.4-graalpy312-graalpy250_312_native-macosx_10_12_x86_64.whl", hash = "sha256:62f35ab99f71b498a50301e1e1fe79e5e43b3ff1ce4eac5dd34806c5f54cd9ab"},
+    {file = "ua_parser_rs-0.1.4-graalpy312-graalpy250_312_native-macosx_11_0_arm64.whl", hash = "sha256:b93a23a7ee56e70d88f5641c2fa9cd2c2e2063545703a207fa4541a990d631ba"},
+    {file = "ua_parser_rs-0.1.4-graalpy312-graalpy250_312_native-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:f4f24cf8952da37b5469e5399d97085c169fbc123e52c3d00813739c86e00aeb"},
+    {file = "ua_parser_rs-0.1.4-graalpy312-graalpy250_312_native-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:bd52da3c2bf2e3bbb266092b54274c18a847dfdc5cbb35e77ff9c3f7b490ddc5"},
+    {file = "ua_parser_rs-0.1.4-graalpy312-graalpy250_312_native-manylinux_2_34_aarch64.whl", hash = "sha256:656c00011da98f149c5da390ff46fbf4d74056f1437e7690e9568adaa4c073c1"},
+    {file = "ua_parser_rs-0.1.4-graalpy312-graalpy250_312_native-manylinux_2_34_x86_64.whl", hash = "sha256:def939c4ed249a12c092ae880eaed5cb1d73e16083b9c4bad78a7c32c7c9e463"},
+    {file = "ua_parser_rs-0.1.4-graalpy312-graalpy250_312_native-win_amd64.whl", hash = "sha256:2396b9f729c9e2766c2f0a23687fb6dee82909ca527c8483d043888357faa296"},
+    {file = "ua_parser_rs-0.1.4-pp311-pypy311_pp73-macosx_10_12_x86_64.whl", hash = "sha256:2a66890d68b5fa3d7327c4312ee4771e6e51b354770be804664d4c8462768531"},
+    {file = "ua_parser_rs-0.1.4-pp311-pypy311_pp73-macosx_11_0_arm64.whl", hash = "sha256:5684c3ee8101dca74c8d943c9f98f302ea2d851852180830dc84e95882a39795"},
+    {file = "ua_parser_rs-0.1.4-pp311-pypy311_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:7b4cab231039f943c8e128a1abd431abaab30030757a0cbe5b82119115bc1190"},
+    {file = "ua_parser_rs-0.1.4-pp311-pypy311_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:6a21595c5c8c77d4fadf5c5bc08546cf6046a6fda825c207e9a339cab18777e8"},
+    {file = "ua_parser_rs-0.1.4-pp311-pypy311_pp73-manylinux_2_34_aarch64.whl", hash = "sha256:8c7a7ea64aed29090d2f3ab72ce7010d95d918b7f9ae3c6e645e31babd5ecabb"},
+    {file = "ua_parser_rs-0.1.4-pp311-pypy311_pp73-manylinux_2_34_x86_64.whl", hash = "sha256:55a61c7af703e86523ab67ab183fa8f3dcbc86361dd5b3035a69b0fff4ddc039"},
+    {file = "ua_parser_rs-0.1.4-pp311-pypy311_pp73-win_amd64.whl", hash = "sha256:6c9520ed240a55faff119b465a84eda2532f8c233dbfabb82ecd35062bb724df"},
+    {file = "ua_parser_rs-0.1.4.tar.gz", hash = "sha256:97dc8c3f40879f1ae80c02d9f573d53b2e9fce510f4296b220f91535bdd9c0f1"},
+]
+
+[[package]]
 name = "urllib3"
 version = "2.6.2"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
@@ -2178,4 +2258,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11"
-content-hash = "ccfeafdf65135fb60ad6a83cde545304edd68ead13bf0ae8917e4680c3f03ba7"
+content-hash = "96133d1f119aa0703f6bf5bdd4e667b9c34cac4eec8f6c371efdad00bf651699"
