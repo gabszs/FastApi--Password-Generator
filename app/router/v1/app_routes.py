@@ -14,8 +14,7 @@ async def health():
 
 @router.get("/debug")
 async def debug(request: Request):
-    logger.warning("Debug endpoint accessed.")
-    logger.error(f"Request headers: {request.headers}")
+    logger.info(f"Request headers: {request.headers}")
     return JSONResponse(
         content={
             "headers": dict(request.headers),
