@@ -25,20 +25,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v3
-        with:
-          python-version: "3.11.1"
-
-      - name: Install Poetry
-        run: pipx install poetry
-
-      - name: Get Version from pyproject.toml
+      - name: Get Version from Commit Hash
         id: get-version
         run: |
-          VERSION=$(poetry version --short)
+          VERSION=$(git rev-parse --short HEAD)
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
-          echo "::set-output name=version::${VERSION}"
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
 
       - name: Build Docker Image
         id: build-image
@@ -70,15 +62,12 @@ jobs:
           fetch-depth: 0
           persist-credentials: true
 
-      - name: Install Poetry
-        run: pipx install poetry
-
-      - name: Get Version from pyproject.toml
+      - name: Get Version from Commit Hash
         id: get-version
         run: |
-          VERSION=$(poetry version --short)
+          VERSION=$(git rev-parse --short HEAD)
           echo "NEW_IMAGE_TAG=${VERSION}" >> $GITHUB_ENV
-          echo "::set-output name=new_version::${VERSION}"
+          echo "new_version=${VERSION}" >> $GITHUB_OUTPUT
 
       - name: Checkout GitOps Branch
         run: |

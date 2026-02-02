@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Request
+from fastapi.responses import JSONResponse
 
 from app.core.telemetry import logger
 
@@ -14,12 +15,15 @@ async def health():
 @router.get("/debug")
 async def debug(request: Request):
     logger.warning("Debug endpoint accessed.")
-    logger.info(f"Request headers: {request.headers}")
-    return {
-        "headers": dict(request.headers),
-        "geo": {
-            "country": request.headers.get("cf-ipcountry"),
-            "city": request.headers.get("cf-ipcity"),
-            "isp": request.headers.get("cf-ipasnorganization"),
+    logger.error(f"Request headers: {request.headers}")
+    return JSONResponse(
+        content={
+            "headers": dict(request.headers),
+            "geo": {
+                "country": request.headers.get("cf-ipcountry"),
+                "city": request.headers.get("cf-ipcity"),
+                "isp": request.headers.get("cf-ipasnorganization"),
+            },
         },
-    }
+        media_type="application/json; charset=utf-8",
+    )
