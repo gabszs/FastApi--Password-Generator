@@ -1,8 +1,9 @@
 import os
-from fastapi import Request
 from datetime import datetime
-from opentelemetry.trace import get_current_span
+
 from device_detector import DeviceDetector
+from fastapi import Request
+from opentelemetry.trace import get_current_span
 
 
 async def otel_setup(request: Request, call_next) -> None:
@@ -44,7 +45,9 @@ async def otel_setup(request: Request, call_next) -> None:
         "client.geo.region.iso_code": request.headers.get("cf-region-code"),
         "client.geo.postal_code": request.headers.get("cf-postal-code"),
         "client.geo.continent.code": request.headers.get("cf-ipcontinent"),
-        "cloud.availability_zone": request.headers.get("cf-ray", "").split("-")[-1] if request.headers.get("cf-ray") else None,
+        "cloud.availability_zone": request.headers.get("cf-ray", "").split("-")[-1]
+        if request.headers.get("cf-ray")
+        else None,
         # User agent attributes
         "user_agent.original": user_agent_str,
         "user_agent.device.model": ua.device_model() if ua else None,
@@ -58,7 +61,7 @@ async def otel_setup(request: Request, call_next) -> None:
         # Browser attributes (Client Hints)
         "browser.brands": request.headers.get("sec-ch-ua"),
         "browser.mobile": request.headers.get("sec-ch-ua-mobile") == "?1",
-        "browser.platform": sec_ch_ua_platform.replace('"', '') if sec_ch_ua_platform else None,
+        "browser.platform": sec_ch_ua_platform.replace('"', "") if sec_ch_ua_platform else None,
         # Request attributes
         "http.request.id": request.headers.get("cf-ray"),
         "client.address": client_address,

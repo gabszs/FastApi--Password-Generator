@@ -3,14 +3,15 @@ import os
 from contextlib import asynccontextmanager
 
 from fastapi import APIRouter
-from fastapi import Depends
 from fastapi import FastAPI
+from fastapi import Request
 from fastapi import Response
 from fastapi.middleware.cors import CORSMiddleware
 from opentelemetry.trace import get_current_span
 from opentelemetry.trace.span import Span
 from uvicorn import run
 
+from app.core.middleware import otel_setup
 from app.core.telemetry import logger
 from app.router.v1 import routers
 
@@ -30,14 +31,13 @@ def add_trace_id_header(response: Response):
 async def lifespan(app: FastAPI):
     # logger.setLevel(logging.INFO)
     logging.getLogger("opentelemetry").propagate = False
-
     logger.info(f"{service_name} initialization started.")
     yield
     logger.info(f"{service_name} shutdown completed.")
 
 
 app = FastAPI(
-    dependencies=[Depends(add_trace_id_header)],
+    # dependencies=[Depends(add_trace_id_header)],
     title="Password Generator",
     version="1.0.0",
     description="Password api to generate random pins and passwords with cicd pipe, test hadson",
@@ -48,6 +48,12 @@ app = FastAPI(
     },
 )
 
+
+@app.middleware("http")
+async def otel_setup_middleware(request: Request, call_next):
+    return await otel_setup(request, call_next)
+
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Liberar para todos os domínios (ajuste conforme necessário)
@@ -55,7 +61,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 app.include_router(router=routers)
 app.include_router(router=router)
