@@ -69,6 +69,21 @@ jobs:
           echo "NEW_IMAGE_TAG=${VERSION}" >> $GITHUB_ENV
           echo "new_version=${VERSION}" >> $GITHUB_OUTPUT
 
+      - name: Get Service Version from pyproject.toml
+        id: get-service-version
+        run: |
+          SERVICE_VERSION=$(grep -m1 'version = ' pyproject.toml | sed 's/version = "\(.*\)"/\1/')
+          echo "SERVICE_VERSION=${SERVICE_VERSION}" >> $GITHUB_ENV
+          echo "service_version=${SERVICE_VERSION}" >> $GITHUB_OUTPUT
+
+      - name: Set Deployment Metadata
+        id: set-metadata
+        run: |
+          echo "COMMIT_HASH=${{ github.sha }}" >> $GITHUB_ENV
+          echo "COMMIT_BRANCH=${{ github.ref_name }}" >> $GITHUB_ENV
+          echo "DEPLOYMENT_USER=${{ github.actor }}" >> $GITHUB_ENV
+          echo "DEPLOYMENT_TRIGGER=${{ github.event_name }}" >> $GITHUB_ENV
+
       - name: Checkout GitOps Branch
         run: |
           git fetch origin
@@ -78,6 +93,22 @@ jobs:
         run: |
           sed -i "s|image: gabzsz/password-generator:.*|image: gabzsz/password-generator:${{ env.NEW_IMAGE_TAG }}|" k8s/deployment.yaml
 
+      - name: Update ConfigMap with Deployment Metadata
+        run: |
+          # Remove existing dynamic entries if present
+          sed -i '/SERVICE_VERSION:/d' k8s/config-map.yaml
+          sed -i '/COMMIT_HASH:/d' k8s/config-map.yaml
+          sed -i '/COMMIT_BRANCH:/d' k8s/config-map.yaml
+          sed -i '/DEPLOYMENT_USER:/d' k8s/config-map.yaml
+          sed -i '/DEPLOYMENT_TRIGGER:/d' k8s/config-map.yaml
+
+          # Append new values
+          echo "  SERVICE_VERSION: \"${{ env.SERVICE_VERSION }}\"" >> k8s/config-map.yaml
+          echo "  COMMIT_HASH: \"${{ env.COMMIT_HASH }}\"" >> k8s/config-map.yaml
+          echo "  COMMIT_BRANCH: \"${{ env.COMMIT_BRANCH }}\"" >> k8s/config-map.yaml
+          echo "  DEPLOYMENT_USER: \"${{ env.DEPLOYMENT_USER }}\"" >> k8s/config-map.yaml
+          echo "  DEPLOYMENT_TRIGGER: \"${{ env.DEPLOYMENT_TRIGGER }}\"" >> k8s/config-map.yaml
+
       - name: Git Config
         run: |
           git config --global user.email "ci-bot@ci.com"
@@ -85,6 +116,6 @@ jobs:
 
       - name: Commit and Push Changes
         run: |
-          git add k8s/deployment.yaml
-          git commit -m "Updating the image tag: ${NEW_IMAGE_TAG}"
+          git add k8s/deployment.yaml k8s/config-map.yaml
+          git commit -m "chore: update image tag to ${NEW_IMAGE_TAG} and deployment metadata"
           git push origin gitops
