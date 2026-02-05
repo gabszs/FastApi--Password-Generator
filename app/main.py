@@ -10,34 +10,21 @@ from fastapi.middleware.cors import CORSMiddleware
 from opentelemetry.trace import get_current_span
 from opentelemetry.trace.span import Span
 from uvicorn import run
-
+from app.core.settings import settings
 from app.core.middleware import otel_setup
 from app.core.telemetry import logger
 from app.router.v1 import routers
-
-service_name = os.getenv("OTEL_SERVICE_NAME", "pve-prod-password-generator-api")
-router = APIRouter()
-
-
-def add_trace_id_header(response: Response):
-    span: Span = get_current_span()
-    trace_id = span.get_span_context().trace_id
-
-    trace_id_hex = format(trace_id, "032x")
-    response.headers["x-trace-id"] = trace_id_hex
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # logger.setLevel(logging.INFO)
     logging.getLogger("opentelemetry").propagate = False
-    logger.info(f"{service_name} initialization started.")
+    logger.info(f"{settings.OTEL_SERVICE_NAME} initialization started.")
     yield
-    logger.info(f"{service_name} shutdown completed.")
+    logger.info(f"{settings.OTEL_SERVICE_NAME} shutdown completed.")
 
 
 app = FastAPI(
-    # dependencies=[Depends(add_trace_id_header)],
     title="Password Generator",
     version="1.0.0",
     description="Password api to generate random pins and passwords with cicd pipe, test hadson",
@@ -48,11 +35,9 @@ app = FastAPI(
     },
 )
 
-
 @app.middleware("http")
 async def otel_setup_middleware(request: Request, call_next):
     return await otel_setup(request, call_next)
-
 
 app.add_middleware(
     CORSMiddleware,
@@ -63,7 +48,6 @@ app.add_middleware(
 )
 
 app.include_router(router=routers)
-app.include_router(router=router)
 
 if __name__ == "__main__":
     run("main:app", host="0.0.0.0", port=80, reload=True)

@@ -2,7 +2,7 @@
 FROM python:3.13-alpine AS builder
 
 # Instala dependências do sistema necessárias para compilar pacotes Rust/C
-RUN apk add --no-cache build-base libgcc gcc musl-dev python3-dev
+# RUN apk add --no-cache build-base libgcc gcc musl-dev python3-dev
 
 RUN pip install poetry==2.1.3
 
@@ -17,6 +17,9 @@ COPY pyproject.toml poetry.lock ./
 
 # O cache do poetry ajuda em builds repetidos
 RUN --mount=type=cache,target=$POETRY_CACHE_DIR poetry install --without dev --no-root
+ENV PATH="/app/.venv/bin:$PATH"
+# Nota: opentelemetry-bootstrap geralmente baixa pacotes. 
+RUN opentelemetry-bootstrap -a install
 
 # Estágio de execução (RUNTIME)
 FROM python:3.13-alpine AS runtime
@@ -37,9 +40,5 @@ COPY app ./app
 COPY pyproject.toml poetry.lock ./
 
 EXPOSE 80
-
-# Nota: opentelemetry-bootstrap geralmente baixa pacotes. 
-# Se puder, adicione as dependências de instrumentação direto no pyproject.toml
-RUN opentelemetry-bootstrap -a install
 
 CMD [ "sh", "-c", "opentelemetry-instrument uvicorn --proxy-headers --host 0.0.0.0 --port 80 app.main:app"]

@@ -1,10 +1,13 @@
 import os
 from datetime import datetime
 
-from device_detector import DeviceDetector
+# from device_detector import DeviceDetector
 from fastapi import Request
+from opentelemetry import trace
 from opentelemetry.trace import get_current_span
+from app.core.settings import settings
 
+tracer = trace.get_tracer(__name__)
 
 async def otel_setup(request: Request, call_next) -> None:
     span = get_current_span()
@@ -15,7 +18,7 @@ async def otel_setup(request: Request, call_next) -> None:
     client_address = request.headers.get("cf-connecting-ip")
     user_agent_str = request.headers.get("user-agent")
 
-    ua = DeviceDetector(user_agent_str).parse() if user_agent_str else None
+    # ua = DeviceDetector(user_agent_str).parse() if user_agent_str else None
     sec_ch_ua_platform = request.headers.get("sec-ch-ua-platform")
 
     # Extrai o body se existir
@@ -27,16 +30,16 @@ async def otel_setup(request: Request, call_next) -> None:
 
     event: dict = {
         # Service attributes
-        "service.environment": os.getenv("ENVIRONMENT", "development"),
-        "deployment.environment": os.getenv("ENVIRONMENT", "development"),
-        "service.team": "gabrielcarvalho",
-        "service.owner": "gabrielcarvalho",
-        "service.version": os.getenv("SERVICE_VERSION"),
-        "service.discord": "kali9849",
-        "service.build.git_hash": os.getenv("COMMIT_HASH"),
-        "service.build.git_branch": os.getenv("COMMIT_BRANCH"),
-        "service.build.deployment.user": os.getenv("DEPLOYMENT_USER"),
-        "service.build.deployment.trigger": os.getenv("DEPLOYMENT_TRIGGER"),
+        "service.environment": settings.ENVIRONMENT,
+        "service.owner.name": settings.SERVICE_OWNER_NAME,
+        "service.owner.url": settings.SERVICE_OWNER_URL,
+        "service.owner.contact": settings.SERVICE_OWNER_CONTACT,
+        "service.owner.discord": settings.SERVICE_OWNER_DISCORD,
+        "service.version": settings.SERVICE_VERSION,
+        "service.build.git_hash": settings.COMMIT_HASH,
+        "service.build.git_branch": settings.COMMIT_BRANCH,
+        "service.build.deployment.user": settings.DEPLOYMENT_USER,
+        "service.build.deployment.trigger": settings.DEPLOYMENT_TRIGGER,
         # Client geo attributes (from Cloudflare headers)
         "client.geo.country.iso_code": request.headers.get("cf-ipcountry"),
         "client.geo.locality.name": request.headers.get("cf-ipcity"),
@@ -50,14 +53,14 @@ async def otel_setup(request: Request, call_next) -> None:
         else None,
         # User agent attributes
         "user_agent.original": user_agent_str,
-        "user_agent.device.model": ua.device_model() if ua else None,
-        "user_agent.device.type": ua.device_type() if ua else None,
-        "user_agent.device.vendor": ua.device_brand() if ua else None,
-        "user_agent.os": ua.os_name() if ua else None,
-        "user_agent.os.version": ua.os_version() if ua else None,
-        "user_agent.browser": ua.client_name() if ua else None,
-        "user_agent.browser_version": ua.client_version() if ua else None,
-        "user_agent.engine": ua.engine() if ua else None,
+        # "user_agent.device.model": ua.device_model() if ua else None,
+        # "user_agent.device.type": ua.device_type() if ua else None,
+        # "user_agent.device.vendor": ua.device_brand() if ua else None,
+        # "user_agent.os": ua.os_name() if ua else None,
+        # "user_agent.os.version": ua.os_version() if ua else None,
+        # "user_agent.browser": ua.client_name() if ua else None,
+        # "user_agent.browser_version": ua.client_version() if ua else None,
+        # "user_agent.engine": ua.engine() if ua else None,
         # Browser attributes (Client Hints)
         "browser.brands": request.headers.get("sec-ch-ua"),
         "browser.mobile": request.headers.get("sec-ch-ua-mobile") == "?1",
@@ -71,7 +74,6 @@ async def otel_setup(request: Request, call_next) -> None:
     request.state.wide_event = event
 
     response = await call_next(request)
-
     status_code = response.status_code
     is_error = status_code >= 400
     is_rate_limit = status_code == 429
@@ -81,5 +83,5 @@ async def otel_setup(request: Request, call_next) -> None:
     event["http.ratelimit.triggered"] = is_rate_limit
     event["http.outcome"] = "error" if is_error else "success"
     span.set_attributes(event)
-    response.headers["x-trace-id"] = format(trace_id, "032x")
+    response.headers["otel-trace-id"] = format(trace_id, "032x")
     return response
