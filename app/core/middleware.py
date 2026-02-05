@@ -1,13 +1,14 @@
-import os
 from datetime import datetime
 
-# from device_detector import DeviceDetector
 from fastapi import Request
 from opentelemetry import trace
 from opentelemetry.trace import get_current_span
+
 from app.core.settings import settings
+# from device_detector import DeviceDetector
 
 tracer = trace.get_tracer(__name__)
+
 
 async def otel_setup(request: Request, call_next) -> None:
     span = get_current_span()

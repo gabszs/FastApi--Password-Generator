@@ -1,51 +1,45 @@
-import re
-from typing import List
-from typing import Optional
-
-from fastapi import Query
 from pydantic import BaseModel
+from pydantic import Field
 from pydantic import field_validator
-
-from app.schemas.custom_base_model import CustomBaseModel
 
 
 class PinPasswordOptions(BaseModel):
-    password_length: Optional[int] = 12
-    quantity: Optional[int] = 1
+    password_length: int = Field(default=12, gt=2, le=200, description="Length of the generated PIN")
+    quantity: int = Field(default=1, gt=0, le=100, description="Number of PINs to generate")
 
 
 class PasswordOptions(PinPasswordOptions):
-    password_length: Optional[int] = 12
-    quantity: Optional[int] = 1
-    has_ponctuation: Optional[bool] = True
+    has_punctuation: bool = Field(default=True, description="Include punctuation characters")
 
 
-class PasswordBody(CustomBaseModel):
-    adicional_lenght: int = Query(gt=0, le=100)
-    quantity: int = Query(gt=0, le=100)
-    ponctuation: bool = False
-    suffle_string_inject: bool = False
-    char_inject: Optional[List[str]]
-    string_inject: Optional[List[str]]
+class ComplexPasswordBody(BaseModel):
+    additional_length: int = Field(..., gt=0, le=100, description="Extra random characters to add")
+    quantity: int = Field(default=1, gt=0, le=100, description="Number of passwords to generate")
+    punctuation: bool = Field(default=False, description="Include punctuation characters")
+    shuffle_string_inject: bool = Field(default=False, description="Shuffle injected strings before inserting")
+    char_inject: list[str] = Field(
+        default_factory=list,
+        description="List of single characters to inject",
+        examples=[["a", "1", "@"]],
+    )
+    string_inject: list[str] = Field(
+        default_factory=list,
+        description="List of strings (2+ chars) to inject",
+        examples=[["hello", "world"]],
+    )
 
     @field_validator("char_inject")
-    def validate_char_inject(cls, char_list):
-        if any(len(char) != 1 for char in char_list):
-            raise ValueError("Invalid Char Regex, The items in the list need to be only one ascii carachter")
+    @classmethod
+    def validate_char_inject(cls, char_list: list[str]) -> list[str]:
+        for char in char_list:
+            if len(char) != 1:
+                raise ValueError(f"Each item must be exactly 1 character, got '{char}' with length {len(char)}")
         return char_list
 
     @field_validator("string_inject")
-    def validate_string_inject(cls, string_list):
-        if not any(re.match(".{2,}", string) for string in string_list):
-            raise ValueError("Invalide String Regex, the items in the list need be more than one ascii charater")
+    @classmethod
+    def validate_string_inject(cls, string_list: list[str]) -> list[str]:
+        for string in string_list:
+            if len(string) < 2:
+                raise ValueError(f"Each item must have at least 2 characters, got '{string}'")
         return string_list
-
-
-if __name__ == "__main__":
-    pb = PasswordBody(
-        suffle_string_inject=False,
-        char_inject=["s", "b", "_", "2"],
-        string_inject=["gabriel23%#@", "dudus1@"],
-    )
-
-    print(pb.dict())

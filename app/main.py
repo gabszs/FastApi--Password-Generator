@@ -1,19 +1,16 @@
 import logging
-import os
 from contextlib import asynccontextmanager
 
-from fastapi import APIRouter
 from fastapi import FastAPI
 from fastapi import Request
-from fastapi import Response
 from fastapi.middleware.cors import CORSMiddleware
-from opentelemetry.trace import get_current_span
-from opentelemetry.trace.span import Span
 from uvicorn import run
-from app.core.settings import settings
+
 from app.core.middleware import otel_setup
+from app.core.settings import settings
 from app.core.telemetry import logger
 from app.router.v1 import routers
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -35,9 +32,11 @@ app = FastAPI(
     },
 )
 
+
 @app.middleware("http")
 async def otel_setup_middleware(request: Request, call_next):
     return await otel_setup(request, call_next)
+
 
 app.add_middleware(
     CORSMiddleware,

@@ -18,7 +18,7 @@ COPY pyproject.toml poetry.lock ./
 # O cache do poetry ajuda em builds repetidos
 RUN --mount=type=cache,target=$POETRY_CACHE_DIR poetry install --without dev --no-root
 ENV PATH="/app/.venv/bin:$PATH"
-# Nota: opentelemetry-bootstrap geralmente baixa pacotes. 
+# Nota: opentelemetry-bootstrap geralmente baixa pacotes.
 RUN opentelemetry-bootstrap -a install
 
 # Estágio de execução (RUNTIME)

@@ -4,7 +4,6 @@ from secrets import choice
 from string import ascii_letters
 from string import digits
 from string import punctuation
-from typing import List
 
 from app.core.telemetry import instrument
 from app.core.telemetry import logger
@@ -16,17 +15,17 @@ class PasswordGenerator:
     Class for generating random passwords and PIN codes.
     """
 
-    async def async_pin(self, pin_lenght: int) -> int:
+    async def async_pin(self, pin_length: int) -> str:
         pin_range = "1234567890"
-        pin_choice = "".join(choice(pin_range) for _ in range(int(pin_lenght)))
-        logger.info(f"Generated PIN of length {pin_lenght}")
+        pin_choice = "".join(choice(pin_range) for _ in range(int(pin_length)))
+        logger.info(f"Generated PIN of length {pin_length}")
         return pin_choice
 
-    async def async_password(self, password_length: int, has_ponctuation: bool = False) -> str:
+    async def async_password(self, password_length: int, has_punctuation: bool = False) -> str:
         minimum_string = choice(ascii_letters) + choice(digits) + choice(digits + ascii_letters)
         letters = ascii_letters + digits
 
-        if has_ponctuation:
+        if has_punctuation:
             minimum_string = list(minimum_string)
             del minimum_string[0]
             minimum_string = "".join(minimum_string)
@@ -48,15 +47,15 @@ class PasswordGenerator:
 
     async def async_complex_password(
         self,
-        char_inject: List[str],
-        string_inject: List[str],
-        suffle_string_inject: bool = False,
-        adicional_lenght: int = 0,
-        has_ponctuation: bool = False,
+        char_inject: list[str],
+        string_inject: list[str],
+        shuffle_string_inject: bool = False,
+        additional_length: int = 0,
+        has_punctuation: bool = False,
     ) -> str:
-        password = await self.async_password(password_length=adicional_lenght, has_ponctuation=has_ponctuation)
+        password = await self.async_password(password_length=additional_length, has_punctuation=has_punctuation)
 
-        if suffle_string_inject:
+        if shuffle_string_inject:
             logger.info("Shuffling injected strings")
             for count, string in enumerate(string_inject):
                 string = list(string)

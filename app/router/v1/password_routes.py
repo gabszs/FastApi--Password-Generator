@@ -1,12 +1,9 @@
 from asyncio import gather
 from typing import Annotated
 
-from fastapi import APIRouter
-from fastapi import Depends
+from fastapi import APIRouter, Depends
 
-from app.schemas.input_schemas import PasswordBody
-from app.schemas.input_schemas import PasswordOptions
-from app.schemas.input_schemas import PinPasswordOptions
+from app.schemas.input_schemas import ComplexPasswordBody, PasswordOptions, PinPasswordOptions
 from app.schemas.output_schemas import PasswordOutput
 from app.use_cases.password import PasswordGenerator
 
@@ -16,54 +13,37 @@ router = APIRouter(tags=["Password-Generator"])
 
 @router.get("/", response_model=PasswordOutput)
 async def get_password(pg: _password_generator, password_options: PasswordOptions = Depends()):
-    corroutines = list()
-    for number in range(password_options.quantity):
-        coro = pg.async_password(
-            password_length=password_options.password_length, has_ponctuation=password_options.has_ponctuation
+    coroutines = [
+        pg.async_password(
+            password_length=password_options.password_length,
+            has_punctuation=password_options.has_punctuation,
         )
-        corroutines.append(coro)
-
-    gather_result = await gather(*corroutines)
-
-    return PasswordOutput(
-        message="Success",
-        data=[{f"{count + 1}º pin": gather_result[count]} for count in range(password_options.quantity)],
-    )
+        for _ in range(password_options.quantity)
+    ]
+    results = await gather(*coroutines)
+    return {"data": list(results)}
 
 
 @router.get("/pin", response_model=PasswordOutput)
 async def pin_code(pg: _password_generator, password_options: PinPasswordOptions = Depends()):
-    pg = PasswordGenerator()
-    corroutines = list()
-
-    for number in range(password_options.quantity):
-        coro = pg.async_pin(pin_lenght=password_options.password_length)
-        corroutines.append(coro)
-
-    gather_result = await gather(*corroutines)
-    return PasswordOutput(
-        message="Success",
-        data=[{f"{count + 1}º pin": gather_result[count]} for count in range(password_options.quantity)],
-    )
+    coroutines = [
+        pg.async_pin(pin_length=password_options.password_length) for _ in range(password_options.quantity)
+    ]
+    results = await gather(*coroutines)
+    return {"data": list(results)}
 
 
 @router.post("/complex_password", response_model=PasswordOutput)
-async def complex_password(password_options: PasswordBody, pg: _password_generator):
-    corroutines = list()
-
-    for number in range(password_options.quantity):
-        coro = pg.async_complex_password(
+async def complex_password(password_options: ComplexPasswordBody, pg: _password_generator):
+    coroutines = [
+        pg.async_complex_password(
             char_inject=password_options.char_inject,
             string_inject=password_options.string_inject,
-            suffle_string_inject=password_options.suffle_string_inject,
-            adicional_lenght=password_options.adicional_lenght,
-            has_ponctuation=password_options.ponctuation,
+            shuffle_string_inject=password_options.shuffle_string_inject,
+            additional_length=password_options.additional_length,
+            has_punctuation=password_options.punctuation,
         )
-        corroutines.append(coro)
-
-    gather_result = await gather(*corroutines)
-
-    return PasswordOutput(
-        message="Success",
-        data=[{f"{count + 1}º pin": gather_result[count]} for count in range(password_options.quantity)],
-    )
+        for _ in range(password_options.quantity)
+    ]
+    results = await gather(*coroutines)
+    return {"data": list(results)}
