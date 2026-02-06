@@ -16,7 +16,6 @@ async def health():
 @router.get("/debug")
 async def debug(request: Request):
     logger.info(f"Request headers: {request.headers}")
-    logger.error("This is a test error log for debugging purposes.")
     return JSONResponse(
         content={
             "headers": dict(request.headers),
