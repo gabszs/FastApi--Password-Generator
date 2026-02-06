@@ -18,6 +18,9 @@ spec:
         image: gabzsz/password-generator:multiple-workers
         ports:
         - containerPort: 80
+        env:
+        - name: OTEL_SERVICE_NAME
+          value: "python-fastapi-automatic-poetry-gunicorn-uvicorn-workers"
         envFrom:
           - configMapRef:
               name: config-map
