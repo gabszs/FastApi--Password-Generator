@@ -14,7 +14,7 @@ from app.router.v1 import routers
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.setLevel("info")
+    logger.setLevel("INFO")
     logging.getLogger("opentelemetry").propagate = False
     logger.info(f"{settings.OTEL_SERVICE_NAME} initialization started.")
     yield
@@ -22,6 +22,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
+    lifespan=lifespan,
     title="Password Generator",
     version="1.0.0",
     description="Password api to generate random pins and passwords with cicd pipe, test hadson",
