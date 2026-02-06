@@ -6,6 +6,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=(".env", "dev.env"), env_file_encoding="utf-8")
 
     OTEL_SERVICE_NAME: str = "password-generator-api"
+    OTEL_PYTHON_LOG_LEVEL: str = "INFO"
     ENVIRONMENT: str = "development"
     SERVICE_OWNER_NAME: str = ""
     SERVICE_OWNER_URL: str = ""
