@@ -14,7 +14,7 @@ from app.router.v1 import routers
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.setLevel(settings.OTEL_PYTHON_LOG_LEVEL)
+    # logger.setLevel(settings.OTEL_PYTHON_LOG_LEVEL)
     logging.getLogger("opentelemetry").propagate = False
     logger.info(f"{settings.OTEL_SERVICE_NAME} initialization started.")
     yield
