@@ -23,3 +23,29 @@ spec:
         - name: default-headers
   tls:
     secretName: certificate-tls
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: password-generator-multiple-workers-ingress
+  namespace: password-generator
+  annotations:
+    kubernetes.io/ingress.class: traefik-external
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`www.python-fastapi-automatic-poetry-gunicorn-uvicorn-workers.gabrielcarvalho.dev`)
+      kind: Rule
+      services:
+        - name: password-generator-multiple-workers-svc
+          port: 80
+    - match: Host(`python-fastapi-automatic-poetry-gunicorn-uvicorn-workers.gabrielcarvalho.dev`)
+      kind: Rule
+      services:
+        - name: password-generator-multiple-workers-svc
+          port: 80
+      middlewares:
+        - name: default-headers
+  tls:
+    secretName: certificate-tls

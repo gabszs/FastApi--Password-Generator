@@ -11,4 +11,18 @@ spec:
   commonName: "password.gabrielcarvalho.dev"
   dnsNames:
   - "password.gabrielcarvalho.dev"
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: certificate-multiple-workers
+  namespace: password-generator
+spec:
+  secretName: certificate-tls-multiple-workers
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  commonName: "python-fastapi-automatic-poetry-gunicorn-uvicorn-workers.gabrielcarvalho.dev"
+  dnsNames:
+  - "python-fastapi-automatic-poetry-gunicorn-uvicorn-workers.gabrielcarvalho.dev"
 
