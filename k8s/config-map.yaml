@@ -16,3 +16,5 @@ data:
   COMMIT_BRANCH: "main"
   DEPLOYMENT_USER: "gabszs"
   DEPLOYMENT_TRIGGER: "push"
+  OTEL_PYTHON_LOG_LEVEL: "info"
+
