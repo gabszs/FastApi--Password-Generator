@@ -11,10 +11,10 @@ data:
   OTEL_SERVICE_NAME: "pve-prod-password-generetor-api"
   OTEL_EXPORTER_OTLP_PROTOCOL: "http/protobuf"
   OTEL_METRICS_EXPORTER: "otlp"
+  OTEL_PYTHON_LOG_LEVEL: "info"
+
   SERVICE_VERSION: "0.2.10"
-  COMMIT_HASH: "ef48e1edc289a4f80e6cbf8f3b562bc1163bb9c1"
+  COMMIT_HASH: "bfafc7e8ac55713b6a6fd3f0e04a8cd36481cee8"
   COMMIT_BRANCH: "main"
   DEPLOYMENT_USER: "gabszs"
   DEPLOYMENT_TRIGGER: "push"
-  OTEL_PYTHON_LOG_LEVEL: "info"
-
