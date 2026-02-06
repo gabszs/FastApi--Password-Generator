@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: password-generator-deployment
+  name: password-generator-multiple-workers
   namespace: password-generator
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: passwordservice
+      app: passwordservice-multiple-workers
   template:
     metadata:
       labels:
-        app: passwordservice
+        app: passwordservice-multiple-workers
     spec:
       containers:
-      - name: passwordservice
-        image: gabzsz/password-generator:ef48e1e
+      - name: passwordservice-multiple-workers
+        image: gabzsz/password-generator:multiple-workers
         ports:
         - containerPort: 80
         envFrom:
