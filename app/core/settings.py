@@ -3,7 +3,7 @@ from pydantic_settings import SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=(".env", "dev.env"), env_file_encoding="utf-8")
+    model_config = SettingsConfigDict(env_file=(".env", "dev.env"), env_file_encoding="utf-8", extra="ignore")
 
     OTEL_SERVICE_NAME: str = "password-generator-api"
     OTEL_PYTHON_LOG_LEVEL: str = "INFO"
