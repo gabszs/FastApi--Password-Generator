@@ -39,6 +39,7 @@ jobs:
           VERSION: ${{ steps.get-version.outputs.version }}
         run: |
           docker build -t $IMAGE_NAME:latest -t $IMAGE_NAME:$VERSION .
+          docker build -f Dockerfile.Workers -t $IMAGE_NAME:multiple-workers .
 
       - name: Docker Hub Login
         run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
