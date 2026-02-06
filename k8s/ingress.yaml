@@ -48,4 +48,4 @@ spec:
       middlewares:
         - name: default-headers
   tls:
-    secretName: certificate-tls
+    secretName: certificate-tls-multiple-workers
