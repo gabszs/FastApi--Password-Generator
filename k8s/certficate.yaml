@@ -22,7 +22,7 @@ spec:
   issuerRef:
     name: letsencrypt-production
     kind: ClusterIssuer
-  commonName: "python-fastapi-automatic-poetry-gunicorn-uvicorn-workers.gabrielcarvalho.dev"
+  commonName: "py-fapi-guvicorn-workers.gabrielcarvalho.dev"
   dnsNames:
-  - "python-fastapi-automatic-poetry-gunicorn-uvicorn-workers.gabrielcarvalho.dev"
+  - "py-fapi-guvicorn-workers.gabrielcarvalho.dev"
 

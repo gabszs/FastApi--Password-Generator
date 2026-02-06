@@ -20,7 +20,7 @@ spec:
         - containerPort: 80
         env:
         - name: OTEL_SERVICE_NAME
-          value: "python-fastapi-automatic-poetry-gunicorn-uvicorn-workers"
+          value: "py-fapi-guvicorn-workers"
         envFrom:
           - configMapRef:
               name: config-map

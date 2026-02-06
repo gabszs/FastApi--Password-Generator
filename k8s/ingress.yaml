@@ -35,12 +35,12 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`www.python-fastapi-automatic-poetry-gunicorn-uvicorn-workers.gabrielcarvalho.dev`)
+    - match: Host(`www.py-fapi-guvicorn-workers.gabrielcarvalho.dev`)
       kind: Rule
       services:
         - name: password-generator-multiple-workers-svc
           port: 80
-    - match: Host(`python-fastapi-automatic-poetry-gunicorn-uvicorn-workers.gabrielcarvalho.dev`)
+    - match: Host(`py-fapi-guvicorn-workers.gabrielcarvalho.dev`)
       kind: Rule
       services:
         - name: password-generator-multiple-workers-svc
