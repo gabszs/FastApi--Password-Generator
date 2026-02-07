@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+
 from fastapi import APIRouter
 from fastapi import Request
 from fastapi.responses import JSONResponse
@@ -10,7 +12,10 @@ router = APIRouter(tags=["Password-Generator"])
 @router.get("/health")
 async def health():
     logger.info("Service is healthy and running.")
-    return {"status": "alive"}
+    return {
+        "status": "ok",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+    }
 
 
 @router.get("/debug")
