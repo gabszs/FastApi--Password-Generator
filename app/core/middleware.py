@@ -16,11 +16,11 @@ async def otel_setup(request: Request, call_next) -> None:
     trace_id = span.get_span_context().trace_id
     request.state.trace_id = trace_id
 
-    client_address = request.headers.get("cf-connecting-ip")
-    user_agent_str = request.headers.get("user-agent")
+    client_address = request.headers.get("cf-connecting-ip", "")
+    user_agent_str = request.headers.get("user-agent", "")
 
     # ua = DeviceDetector(user_agent_str).parse() if user_agent_str else None
-    sec_ch_ua_platform = request.headers.get("sec-ch-ua-platform")
+    sec_ch_ua_platform = request.headers.get("sec-ch-ua-platform", "")
 
     # Extrai o body se existir
     request_body = None
@@ -42,16 +42,16 @@ async def otel_setup(request: Request, call_next) -> None:
         "service.build.deployment.user": settings.DEPLOYMENT_USER,
         "service.build.deployment.trigger": settings.DEPLOYMENT_TRIGGER,
         # Client geo attributes (from Cloudflare headers)
-        "client.geo.country.iso_code": request.headers.get("cf-ipcountry"),
-        "client.geo.locality.name": request.headers.get("cf-ipcity"),
-        "client.geo.location.lat": request.headers.get("cf-iplatitude"),
-        "client.geo.location.lon": request.headers.get("cf-iplongitude"),
-        "client.geo.region.iso_code": request.headers.get("cf-region-code"),
-        "client.geo.postal_code": request.headers.get("cf-postal-code"),
-        "client.geo.continent.code": request.headers.get("cf-ipcontinent"),
-        "cloud.availability_zone": request.headers.get("cf-ray", "").split("-")[-1]
-        if request.headers.get("cf-ray")
-        else None,
+        "client.geo.country.iso_code": request.headers.get("cf-ipcountry", ""),
+        "client.geo.locality.name": request.headers.get("cf-ipcity", ""),
+        "client.geo.location.lat": request.headers.get("cf-iplatitude", ""),
+        "client.geo.location.lon": request.headers.get("cf-iplongitude", ""),
+        "client.geo.region.iso_code": request.headers.get("cf-region-code", ""),
+        "client.geo.postal_code": request.headers.get("cf-postal-code", ""),
+        "client.geo.continent.code": request.headers.get("cf-ipcontinent", ""),
+        "client.geo.colo": request.headers.get("cf-colo", ""),
+        "client.network.asn": request.headers.get("cf-asn", ""),
+        "client.network.as.organization": request.headers.get("cf-asorg", ""),
         # User agent attributes
         "user_agent.original": user_agent_str,
         # "user_agent.device.model": ua.device_model() if ua else None,
@@ -63,11 +63,11 @@ async def otel_setup(request: Request, call_next) -> None:
         # "user_agent.browser_version": ua.client_version() if ua else None,
         # "user_agent.engine": ua.engine() if ua else None,
         # Browser attributes (Client Hints)
-        "browser.brands": request.headers.get("sec-ch-ua"),
-        "browser.mobile": request.headers.get("sec-ch-ua-mobile") == "?1",
+        "browser.brands": request.headers.get("sec-ch-ua", ""),
+        "browser.mobile": request.headers.get("sec-ch-ua-mobile", "") == "?1",
         "browser.platform": sec_ch_ua_platform.replace('"', "") if sec_ch_ua_platform else None,
         # Request attributes
-        "http.request.id": request.headers.get("cf-ray"),
+        "http.request.id": request.headers.get("cf-ray", ""),
         "client.address": client_address,
         **({"http.request.body": request_body} if request_body is not None else {}),
     }
