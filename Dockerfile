@@ -25,7 +25,7 @@ RUN opentelemetry-bootstrap -a install
 FROM python:3.13-alpine AS runtime
 
 # Instala a libgcc no runtime (necessária para rodar os binários compilados no builder)
-RUN apk add --no-cache libgcc libstdc++
+# RUN apk add --no-cache libgcc libstdc++
 
 ENV VIRTUAL_ENV=/app/.venv \
     PATH="/app/.venv/bin:$PATH"
