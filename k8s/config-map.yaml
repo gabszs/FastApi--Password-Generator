@@ -14,7 +14,7 @@ data:
   OTEL_PYTHON_LOG_LEVEL: "info"
 
   SERVICE_VERSION: "0.2.14"
-  COMMIT_HASH: "38dce1a2dab459b0af366ffee7d27bafe7add2ae"
+  COMMIT_HASH: "1fa5bc6e2a7d763ce11aee89fcd142d008d60f44"
   COMMIT_BRANCH: "main"
   DEPLOYMENT_USER: "gabszs"
   DEPLOYMENT_TRIGGER: "push"
