@@ -6,6 +6,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: traefik-external
 spec:
+  ingressClassName: traefik-external
   rules:
     - host: password.gabrielcarvalho.dev
       http:
@@ -30,6 +31,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: traefik-external
 spec:
+  ingressClassName: traefik-external
   rules:
     - host: py-fapi-guvicorn-workers.gabrielcarvalho.dev
       http:
