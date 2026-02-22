@@ -14,12 +14,12 @@ data:
   OTEL_PYTHON_LOG_LEVEL: "info"
   OTEL_SERVICE_NAMESPACE: "production"
 
-  SERVICE_VERSION: "0.2.14"
-  COMMIT_HASH: "1fa5bc6e2a7d763ce11aee89fcd142d008d60f44"
-  COMMIT_BRANCH: "main"
-  DEPLOYMENT_TRIGGER: "push"
   SERVICE_OWNER_NAME: "gabrielcarvalho"
   SERVICE_OWNER_CONTACT: "gabrielcarvalho.workk@gmail.com"
-  DEPLOYMENT_USER: "ci/cd bot"  
 
   OTEL_RESOURCE_ATTRIBUTES: "service.namespace=${OTEL_SERVICE_NAMESPACE},service.environment=${OTEL_SERVICE_NAMESPACE},service.host=${SERVICE_HOST},service.version=${SERVICE_VERSION},service.build.git_hash=${COMMIT_HASH},service.owner.name=${SERVICE_OWNER_NAME},service.owner.contact=${SERVICE_OWNER_CONTACT},service.build.git_branch=${COMMIT_BRANCH},service.build.deployment.user=${DEPLOYMENT_USER},service.build.deployment.trigger=${DEPLOYMENT_TRIGGER}"
+  SERVICE_VERSION: "0.2.14"
+  COMMIT_HASH: "04cf2d0303e75d4ce7210282eedad5298477d1dd"
+  COMMIT_BRANCH: "main"
+  DEPLOYMENT_USER: "gabszs"
+  DEPLOYMENT_TRIGGER: "push"
