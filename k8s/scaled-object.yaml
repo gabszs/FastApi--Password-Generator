@@ -6,22 +6,21 @@ metadata:
 spec:
   scaleTargetRef:
     kind: Deployment
-    name: password-generator-deployment             # Nome do Deployment que será escalado
+    name: password-generator-deployment
   minReplicaCount: 1
   maxReplicaCount: 5
-  cooldownPeriod: 30           # Tempo para reduzir réplicas após ociosidade (segundos)
-  pollingInterval: 15          # Intervalo de checagem (segundos)
+  cooldownPeriod: 30
+  pollingInterval: 15
   triggers:
-    # Escalonamento baseado em CPU
     - type: cpu
+      metricType: Utilization
       metadata:
-        type: Utilization
-        value: "60"            # Equivalente a averageUtilization: 60
-    # Escalonamento baseado em memória
+        value: "60"
+
     - type: memory
+      metricType: Utilization
       metadata:
-        type: Utilization
-        value: "75"            # Equivalente a averageUtilization: 75
+        value: "75"
 #     # # Escalonamento baseado em cron
 #     # - type: cron
 #     #   metadata:
