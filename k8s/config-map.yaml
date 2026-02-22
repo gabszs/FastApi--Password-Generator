@@ -22,4 +22,3 @@ data:
   COMMIT_BRANCH: "main"
   DEPLOYMENT_USER: "gabszs"
   DEPLOYMENT_TRIGGER: "push"
-  OTEL_RESOURCE_ATTRIBUTES: "service.namespace=${OTEL_SERVICE_NAMESPACE},service.environment=${OTEL_SERVICE_NAMESPACE},service.host=${SERVICE_HOST},service.version=${SERVICE_VERSION},service.build.git_hash=${COMMIT_HASH},service.owner.name=${SERVICE_OWNER_NAME},service.owner.contact=${SERVICE_OWNER_CONTACT},service.build.git_branch=${COMMIT_BRANCH},service.build.deployment.user=${DEPLOYMENT_USER},service.build.deployment.trigger=${DEPLOYMENT_TRIGGER}"
