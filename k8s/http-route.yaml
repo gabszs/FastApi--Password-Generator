@@ -1,15 +1,15 @@
-apiVersion: gateway.networking.k8s.io/v1
-kind: HTTPRoute
-metadata:
-  name: password-route
-  namespace: password-generator
-spec:
-  parentRefs:
-  - name: web-gateway
-    namespace: traefik
-  hostnames:
-  - "password-gateway.gabrielcarvalho.dev"
-  rules:
-  - backendRefs:
-    - name: password-service
-      port: 80
+# apiVersion: gateway.networking.k8s.io/v1
+# kind: HTTPRoute
+# metadata:
+#   name: password-route
+#   namespace: password-generator
+# spec:
+#   parentRefs:
+#   - name: web-gateway
+#     namespace: traefik
+#   hostnames:
+#   - "password-gateway.gabrielcarvalho.dev"
+#   rules:
+#   - backendRefs:
+#     - name: password-service
+#       port: 80
