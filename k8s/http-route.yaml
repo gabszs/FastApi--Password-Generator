@@ -11,5 +11,5 @@ spec:
   - "password-gateway.gabrielcarvalho.dev"
   rules:
   - backendRefs:
-    - name: password-service
+    - name: password-generator-svc
       port: 80
