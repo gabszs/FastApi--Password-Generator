@@ -5,7 +5,7 @@ from fastapi import status
 from app.core.exceptions import http_errors
 from app.core.telemetry import logger
 
-router = APIRouter(tags=["Error-Examples"])
+router = APIRouter(tags=["errors"])
 
 
 @router.get("/error/bad-request")
