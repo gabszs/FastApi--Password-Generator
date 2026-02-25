@@ -18,15 +18,13 @@ async def bad_request_example(
     Retorna um erro 400 Bad Request.
     Exemplo: /error/bad-request?message=BadRequestError:%20dados%20inválidos
     """
-    logger.warning(
-        message,
+    raise http_errors.bad_request(
+        detail=message,
         extra={
-            "exception_type": "BadRequestError",
             "status_code": status.HTTP_400_BAD_REQUEST,
             "url": str(request.url),
         },
     )
-    raise http_errors.bad_request(detail=message)
 
 
 @router.get("/error/unauthorized")
@@ -38,15 +36,13 @@ async def unauthorized_example(
     Retorna um erro 401 Unauthorized (credenciais inválidas).
     Exemplo: /error/unauthorized?message=InvalidCredentials:%20login%20inválido
     """
-    logger.warning(
-        message,
+    raise http_errors.invalid_credentials(
+        detail=message,
         extra={
-            "exception_type": "InvalidCredentials",
             "status_code": status.HTTP_401_UNAUTHORIZED,
             "url": str(request.url),
         },
     )
-    raise http_errors.invalid_credentials(detail=message)
 
 
 @router.get("/error/forbidden")
@@ -58,15 +54,13 @@ async def forbidden_example(
     Retorna um erro 403 Forbidden (erro de autenticação).
     Exemplo: /error/forbidden?message=AuthError:%20acesso%20negado
     """
-    logger.warning(
-        message,
+    raise http_errors.auth_error(
+        detail=message,
         extra={
-            "exception_type": "AuthError",
             "status_code": status.HTTP_403_FORBIDDEN,
             "url": str(request.url),
         },
     )
-    raise http_errors.auth_error(detail=message)
 
 
 @router.get("/error/not-found")
@@ -78,15 +72,13 @@ async def not_found_example(
     Retorna um erro 404 Not Found.
     Exemplo: /error/not-found?message=NotFoundError:%20recurso%20não%20encontrado
     """
-    logger.warning(
-        message,
+    raise http_errors.not_found(
+        detail=message,
         extra={
-            "exception_type": "NotFoundError",
             "status_code": status.HTTP_404_NOT_FOUND,
             "url": str(request.url),
         },
     )
-    raise http_errors.not_found(detail=message)
 
 
 @router.get("/error/validation")
@@ -98,15 +90,13 @@ async def validation_error_example(
     Retorna um erro 422 Unprocessable Entity (erro de validação).
     Exemplo: /error/validation?message=ValidationError:%20dados%20inválidos
     """
-    logger.warning(
-        message,
+    raise http_errors.validation_error(
+        detail=message,
         extra={
-            "exception_type": "ValidationError",
             "status_code": status.HTTP_422_UNPROCESSABLE_ENTITY,
             "url": str(request.url),
         },
     )
-    raise http_errors.validation_error(detail=message)
 
 
 @router.get("/error/conflict")
@@ -118,15 +108,13 @@ async def conflict_example(
     Retorna um erro 409 Conflict (recurso duplicado).
     Exemplo: /error/conflict?message=DuplicatedError:%20recurso%20já%20existe
     """
-    logger.warning(
-        message,
+    raise http_errors.duplicated_error(
+        detail=message,
         extra={
-            "exception_type": "DuplicatedError",
             "status_code": status.HTTP_409_CONFLICT,
             "url": str(request.url),
         },
     )
-    raise http_errors.duplicated_error(detail=message)
 
 
 @router.get("/error/internal-server")

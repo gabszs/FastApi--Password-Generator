@@ -13,34 +13,50 @@ class AppExceptions:
         self,
         detail: Any = None,
         headers: Optional[Dict[str, str]] = None,
+        extra: Optional[Dict[str, Any]] = None,
     ) -> HTTPException:
-        logger.warning(detail, extra={"exception_type": "BadRequestError"})
+        log_extra = {"exception_type": "BadRequestError"}
+        if extra:
+            log_extra.update(extra)
+        logger.warning(detail, extra=log_extra)
         return HTTPException(status.HTTP_400_BAD_REQUEST, detail, headers)
 
     def auth_error(
         self,
         detail: Any = None,
         headers: Optional[Dict[str, str]] = None,
+        extra: Optional[Dict[str, Any]] = None,
     ) -> HTTPException:
-        logger.warning(detail, extra={"exception_type": "AuthError"})
+        log_extra = {"exception_type": "AuthError"}
+        if extra:
+            log_extra.update(extra)
+        logger.warning(detail, extra=log_extra)
         return HTTPException(status.HTTP_403_FORBIDDEN, detail, headers)
 
     def not_found(
         self,
         detail: Any = None,
         headers: Optional[Dict[str, str]] = None,
+        extra: Optional[Dict[str, Any]] = None,
     ) -> HTTPException:
-        logger.warning(detail, extra={"exception_type": "NotFoundError"})
+        log_extra = {"exception_type": "NotFoundError"}
+        if extra:
+            log_extra.update(extra)
+        logger.warning(detail, extra=log_extra)
         return HTTPException(status.HTTP_404_NOT_FOUND, detail, headers)
 
     def validation_error(
         self,
         detail: Any = None,
         headers: Optional[Dict[str, Any]] = None,
+        extra: Optional[Dict[str, Any]] = None,
     ) -> HTTPException:
+        log_extra = {"exception_type": "ValidationError"}
+        if extra:
+            log_extra.update(extra)
         logger.warning(
             detail,
-            extra={"exception_type": "ValidationError"},
+            extra=log_extra,
         )
         return HTTPException(
             status.HTTP_422_UNPROCESSABLE_ENTITY,
@@ -52,10 +68,14 @@ class AppExceptions:
         self,
         detail: Any = None,
         headers: Optional[Dict[str, Any]] = None,
+        extra: Optional[Dict[str, Any]] = None,
     ) -> HTTPException:
+        log_extra = {"exception_type": "DuplicatedError"}
+        if extra:
+            log_extra.update(extra)
         logger.warning(
             detail,
-            extra={"exception_type": "DuplicatedError"},
+            extra=log_extra,
         )
         return HTTPException(status.HTTP_409_CONFLICT, detail, headers)
 
@@ -63,10 +83,14 @@ class AppExceptions:
         self,
         detail: Any = None,
         headers: Optional[Dict[str, Any]] = None,
+        extra: Optional[Dict[str, Any]] = None,
     ) -> HTTPException:
+        log_extra = {"exception_type": "InvalidCredentials"}
+        if extra:
+            log_extra.update(extra)
         logger.warning(
             detail,
-            extra={"exception_type": "InvalidCredentials"},
+            extra=log_extra,
         )
         return HTTPException(status.HTTP_401_UNAUTHORIZED, detail, headers)
 
