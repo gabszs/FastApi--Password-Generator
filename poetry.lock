@@ -1812,20 +1812,20 @@ cffi = ">=2.0.0,<3.0.0"
 
 [[package]]
 name = "pyroscope-otel"
-version = "0.4.1"
+version = "1.0.0"
 description = "A library providing profiling functionalities related to OpenTelemetry"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "pyroscope_otel-0.4.1-py3-none-any.whl", hash = "sha256:57fa917ca5f24f8e12f3853a80f50df57081e01585f4cd2c2db7a621fde8901c"},
-    {file = "pyroscope_otel-0.4.1.tar.gz", hash = "sha256:36c376c04b0408fbf8dc329f4b7198c214d0466a1e619cadb72251c38e815b57"},
+    {file = "pyroscope_otel-1.0.0-py3-none-any.whl", hash = "sha256:b4282af41cfbb7211acfe3ce21f76cb34681694d210f1a97ac941ad60ef0f35c"},
+    {file = "pyroscope_otel-1.0.0.tar.gz", hash = "sha256:43de0314e8d146de3378e6add2d80f2aa118b56974e8cb99f17a50ce76573546"},
 ]
 
 [package.dependencies]
 opentelemetry-api = ">=1.27.0,<2.0.0"
 opentelemetry-sdk = ">=1.27.0,<2.0.0"
-pyroscope-io = ">=0.8.10"
+pyroscope-io = ">=1.0.0,<2.0.0"
 
 [[package]]
 name = "pytest"
@@ -2381,4 +2381,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11"
-content-hash = "b0e3f6f1c9f22e5ca384d1cae57ab93095523563fcd1801a911797735811489e"
+content-hash = "3f0d36bc6d8ffd15d6b81a90307e3876f929041ed34954eb310702f5daa78f18"
