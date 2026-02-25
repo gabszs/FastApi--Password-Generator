@@ -18,7 +18,7 @@ data:
   SERVICE_OWNER_CONTACT: "gabrielcarvalho.workk@gmail.com"
 
   SERVICE_VERSION: "0.2.14"
-  COMMIT_HASH: "175d6afd713dd8c0aa9eaa39200cbade1372c447"
+  COMMIT_HASH: "eef2f00013dd7337f370f2067d817d348608e11d"
   COMMIT_BRANCH: "main"
   DEPLOYMENT_USER: "gabszs"
   DEPLOYMENT_TRIGGER: "push"
