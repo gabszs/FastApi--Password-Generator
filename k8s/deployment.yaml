@@ -21,6 +21,8 @@ spec:
         envFrom:
           - configMapRef:
               name: config-map
+        - configMapRef:
+            name: config-map-2
         env:
           - name: K8S_POD_IP
             valueFrom:
