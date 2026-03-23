@@ -4,6 +4,7 @@ from datetime import timezone
 from fastapi import APIRouter
 from fastapi import Request
 from fastapi.responses import JSONResponse
+from typing import Any
 
 from app.core.telemetry import logger
 
@@ -34,6 +35,20 @@ async def debug(request: Request):
         media_type="application/json; charset=utf-8",
     )
 
+
+def _debug_response(request: Request, body: Any = None) -> JSONResponse:
+    return JSONResponse(
+        content={
+            "headers": dict(request.headers),
+            "geo": {
+                "country": request.headers.get("cf-ipcountry"),
+                "city": request.headers.get("cf-ipcity"),
+                "isp": request.headers.get("cf-ipasnorganization"),
+            },
+            "body": body,
+        },
+        media_type="application/json; charset=utf-8",
+    )
 
 @router.post("/debug")
 async def debug_post(request: Request):
