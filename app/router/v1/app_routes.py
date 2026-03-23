@@ -33,3 +33,20 @@ async def debug(request: Request):
         },
         media_type="application/json; charset=utf-8",
     )
+
+
+@router.post("/debug")
+async def debug_post(request: Request):
+    logger.info(f"Debug POST received. Request headers: {request.headers}")
+
+    raw_body = await request.body()
+    parsed_body: Any = None
+
+    if raw_body:
+        decoded_body = raw_body.decode("utf-8", errors="replace")
+        try:
+            parsed_body = json.loads(decoded_body)
+        except json.JSONDecodeError:
+            parsed_body = decoded_body
+
+    return _debug_response(request=request, body=parsed_body)
